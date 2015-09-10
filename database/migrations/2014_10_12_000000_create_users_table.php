@@ -20,11 +20,13 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('first_name');
             $table->string('last_name');
+            $table->enum('gender', ['m','f']);
             $table->boolean('active')->default(0);
             $table->enum('permission',['personal', 'professional', 'admin', 'root'])->default('personal');
             $table->char('language', 2)->default('en');
             $table->string('activation_code')->nullable();
             $table->string('avatar')->default('/images/default-profile.png');
+            $table->string('fb_id')->nullable();
             $table->timestamp('activated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

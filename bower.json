@@ -1,0 +1,38 @@
+{
+  "name": "blog",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wizardoncouch/blog",
+  "authors": [
+    "Alex Culango <alexculango.nst@gmail.com>"
+  ],
+  "description": "Bridal Gallery",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "Wedding",
+    "Prenuptials"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "bootstrap-sass-official#~3.3.5",
+    "bootstrap-tagsinput": "~0.5.0",
+    "bootstrap3-typeahead": "~3.1.1",
+    "bourbon": "~4.2.4",
+    "cookies-js": "~1.2.1",
+    "dropzone": "~4.0.1",
+    "font-awesome": "fontawesome#~4.4.0",
+    "jquery": "~2.1.4",
+    "vue": "~0.12.13",
+    "vue-resource": "~0.1.15",
+    "vue-router": "~0.6.0"
+  }
+}
