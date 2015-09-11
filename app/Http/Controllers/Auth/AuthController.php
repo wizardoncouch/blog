@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\ActivateAccountRequest;
+use App\Http\Requests\FBSigninRequest;
+use App\Http\Requests\SigninRequest;
+use App\Http\Requests\SignupRequest;
 use App\User;
-use Validator;
 use App\Http\Controllers\Controller;
+use JWTAuth;
 
 class AuthController extends Controller
 {
@@ -34,25 +38,22 @@ class AuthController extends Controller
             $credentials = $request->only($field, 'password');
             $credentials['active'] = 1;
             // Attempt to verify the credentials and create a token for the user.
-            if (!$token = JWTAuth::attempt($credentials)) {
-                $response['text'] = 'Invalid Credentials';
-                $response['code'] = 422;
-            }
-            if ($user = JWTAuth::toUser($token)) {
-                $user->token = $token;
-                $response['data'] = $user;
+            if ($token = JWTAuth::attempt($credentials)) {
                 $response['code'] = 200;
+                $response['token'] = $token;
+                $response['data'] = JWTAuth::toUser($token);
+            } else {
+                $response['code'] = 422;
+                $response['text'] = 'Invalid Credentials';
             }
-            $response['text'] = 'User not found';
-            $response['code'] = 401;
         } catch (JWTException $e) {
             // Something went wrong whilst attempting to encode the token.
-            $response['text'] = $e->getMessage();
             $response['code'] = 500;
+            $response['text'] = $e->getMessage();
         } catch (Exception $e) {
             // Server Error
-            $response['text'] = $e->getMessage();
             $response['code'] = 500;
+            $response['text'] = $e->getMessage();
         }
         return response()->json($response);
     }
@@ -88,11 +89,11 @@ class AuthController extends Controller
                 $message->to($email);
                 $message->subject(trans('app.account_activation'));
             });
-            $response['data'] = $user;
             $response['code'] = 200;
+            $response['data'] = $user;
         } catch (\Exception $e) {
-            $response['text'] = $e->getMessage();
             $response['code'] = 500;
+            $response['text'] = $e->getMessage();
         }
         return response()->json($response);
     }
@@ -119,7 +120,7 @@ class AuthController extends Controller
                     'active'     => 1
                 ];
                 // Create a new user.
-                $response = User::create($data);
+                $user = User::create($data);
                 //get and set profile picture
                 if ($profile = @file_get_contents($request->get('url'))) {
                     $dir = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile';
@@ -133,29 +134,29 @@ class AuthController extends Controller
                     }
                     $avatar = $dir . DIRECTORY_SEPARATOR . md5($fb_id . $crypt) . '-avatar.jpg';
                     if (@file_put_contents($avatar, $profile)) {
-                        $response->avatar = $avatar;
+                        $user->avatar = $avatar;
                     }
                 }
-                $response->activated_at = Carbon::now();
+                $user->activated_at = Carbon::now();
                 // Set default values after creating an entry in the users table.
-                $response->register();
+                $user->register();
             }
             $credentials = [
                 'fb_id'    => $fb_id,
-                'password' => $fb_id
+                'password' => $fb_id,
+                'active'   => 1
             ];
             if ($token = JWTAuth::attempt($credentials)) {
-                if ($user = JWTAuth::toUser($token)) {
-                    $user->token = $token;
-                    $response['data'] = $user;
-                    $response['code'] = 200;
-                }
+                $response['code'] = 200;
+                $response['token'] = $token;
+                $response['data'] = JWTAuth::toUser($token);
+            } else {
+                $response['code'] = 422;
+                $response['text'] = 'Invalid Credentials';
             }
-            $response['text'] = 'User not found.';
-            $response['code'] = 401;
         } catch (\Exception $e) {
-            $response['text'] = $e->getMessage();
             $response['code'] = 500;
+            $response['text'] = $e->getMessage();
         }
 
         return response()->json($response);
@@ -180,17 +181,18 @@ class AuthController extends Controller
                     'activated_at'    => Carbon::now()
                 ])
             ) {
+                $response['code'] = 200;
                 $response['text'] = 'Activated';
             } else {
+                $response['code'] = 417;
                 $response['text'] = 'Activation Failed';
             }
-            $response['code'] = 200;
         } catch (\PDOException $e) {
-            $response['text'] = $e->getMessage();
             $response['code'] = 500;
+            $response['text'] = $e->getMessage();
         } catch (\Exception $e) {
-            $response['text'] = $e->getMessage();
             $response['code'] = 500;
+            $response['text'] = $e->getMessage();
         }
         return response()->json($response);
     }

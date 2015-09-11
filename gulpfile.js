@@ -17,14 +17,14 @@ var paths = {
     'resource': './vendor/bower_components/vue-resource/',
     'router': './vendor/bower_components/vue-router/',
     'bootstrap': './vendor/bower_components/bootstrap-sass/assets/',
-    'fontawesome': './vendor/bower_components/fontawesome/',
+    'fontawesome': './vendor/bower_components/font-awesome/',
     'cookies': './vendor/bower_components/cookies-js/',
     'bourbon': './vendor/bower_components/bourbon/app/assets/',
     'tagsinput': './vendor/bower_components/bootstrap-tagsinput/',
     'typeahead': './vendor/bower_components/bootstrap3-typeahead/',
 }
 elixir(function (mix) {
-    mix.sass("app.scss", 'public/css/app.css', {includePaths: [paths.bootstrap + 'stylesheets', paths.fontawesome + 'scss', paths.bourbon + 'stylesheets']});
+    mix.sass("*.*", 'public/css/app.css', {includePaths: [paths.bootstrap + 'stylesheets', paths.fontawesome + 'scss', paths.bourbon + 'stylesheets']});
     mix.styles(['public/css/app.css', 'public/css/scrollbar.min.css', paths.tagsinput + 'dist/bootstrap-tagsinput.css'], 'public/css/app.css', './').version('public/css/app.css');
     mix.copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts/bootstrap')
         .copy(paths.fontawesome + 'fonts/**', 'public/fonts/fontawesome');

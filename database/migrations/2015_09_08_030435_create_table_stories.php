@@ -13,6 +13,7 @@ class CreateTableStories extends Migration
     public function up()
     {
         Schema::create('stories', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('user_id')->index();
             $table->unsignedInteger('category_id')->index();

@@ -12,7 +12,14 @@
 */
 /***** frontend routes *****/
 Route::get('/', function () {
+    $string = 'eyJzdWIiOjIsImlzcyI6Imh0dHA6XC9cL2Jsb2cuZGV2XC9hcGlcLzEuMFwvYXV0aFwvc2lnbmluIiwiaWF0IjoiMTQ0MTk1NjM4NyIsImV4cCI6IjE0NDE5NTk5ODciLCJuYmYiOiIxNDQxOTU2Mzg3IiwianRpIjoiNmM5OTRkNWZhZjcwMWZkMjEyODFlOTFmNTM1Mjc3OWEifQ';
+    dd(base64_decode($string));
     return view('welcome');
+});
+
+/***** admin routes *****/
+Route::get('/admin', function () {
+    return View::make('admin');
 });
 
 /***** backend routes *****/
