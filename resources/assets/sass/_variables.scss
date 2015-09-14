@@ -1,0 +1,76 @@
+/**
+ * Swatches
+ */
+
+$primary: #03a9f4;
+$primary-hover: rgba($primary, 0.90);
+$primary-active: #029ADE;
+
+$complete: #48b0f7;
+$complete-hover: rgba($complete, 0.90);
+$complete-active: #3D9EE0;
+
+$success: #2ecc71;
+$success-hover: rgba($success, 0.90);
+$success-active: #54B771;
+
+$danger: #f55753;
+$danger-hover: rgba($danger, 0.90);
+$danger-active: #EF504C;
+
+$warning: #f8d053;
+$warning-hover: rgba($warning, 0.90);
+$warning-active: #c9a843;
+
+$light: #F9F9F9;
+$white: #fff;
+$white-hover: #e6e6e6;
+$white-active: #2c2c2c;
+
+$darker: #23282d;
+
+$dark: #333;
+$dark-hover: #2b303b;
+$dark-active: #232730;
+$darker-menu: #272b35;
+$dark-menu: #2B303B;
+
+$link: #337ab7;
+$link-hover: rgba( $link, 0.90 );
+$link-active: #316C9E;
+
+$text: #626262;
+$darker-grey: #ccc;
+$grey: #ebecec;
+$darken: #000;
+$border: rgba($dark, 0.09);
+$border-dotted: #ccc;
+
+$light-blue: #F6F7F8;
+$light-gray: #9197a3;
+
+$facebook: #3A5A98;
+$twitter: #55ACEE;
+$instagram: #517FA6;
+$google-plus: #D34836;
+$pinterest: #CB2026;
+
+/** 
+ * Fonts
+ */
+
+$base-font-size		: 16px;
+$font-montserrat	: 'Montserrat', sans-serif;
+$font-open-sans		: 'Open Sans', sans-serif;
+
+
+/**
+ * Media Query Break Points
+ */
+
+$screen-xs		: 270px;
+$screen-phablet	: 600px;
+$screen-sm		: 768px;
+$screen-md 		: 992px;
+$screen-lg 		: 1200px;
+$screen-xlg 	: 1400px;
