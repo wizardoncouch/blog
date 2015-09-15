@@ -48,6 +48,23 @@ class User extends Model implements AuthenticatableContract,
 
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function story()
+    {
+        return $this->hasMany('App\Story');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function category()
+    {
+        return $this->hasMany('App\Category');
+    }
+
+
+    /**
      * register a user with default falues
      */
     public function register()

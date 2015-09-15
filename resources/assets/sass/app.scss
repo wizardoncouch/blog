@@ -290,6 +290,46 @@ ul.alert-dropdown {
 }
 
 
+/** custom by alex copied from larry**/
+
+.post-editor{
+  .form-group{
+    margin-bottom: 10px;
+  }
+
+  h2{
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 29px;
+
+    a.add-new-h2{
+      margin-left: 4px;
+      padding: 4px 8px;
+      position: relative;
+      top: -3px;
+      text-decoration: none;
+      border: none;
+      background: #e0e0e0;
+      text-shadow: none;
+      font-weight: 600;
+      font-size: 13px;
+      font-family: $font-open-sans;
+      @include border-radius(2px);
+
+      &:hover{
+        background-color: $complete;
+        color: $white;
+      }
+    }
+  }
+
+  #post-title{
+    font-size: 1.3em;
+    color: #333;
+  }
+}
+
+
 
 
 

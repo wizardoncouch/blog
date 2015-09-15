@@ -58,12 +58,9 @@ var Dashboard = Vue.extend({
     '</div>'
 });
 // Story Features
-//var StoryListMixin = require('./views/admin-stories');
+var StoriesMixin = require('./views/admin/stories');
 var Stories = Vue.extend({
-    //mixins: [StoryListMixin]
-    template: '<div class="foo">' +
-    '<h2>This is Stories!</h2>' +
-    '</div>'
+    mixins: [StoriesMixin]
 });
 
 //var StoryEditMixin = require('./views/admin-story-edit');

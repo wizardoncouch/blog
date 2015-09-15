@@ -1,0 +1,66 @@
+<h2 class="page-header">
+    <span id="post-title">Stories<small>List</small></span>
+    <a v-link="{ name : 'storyNew' }" class="add-new-h2">Add New</a>
+</h2>
+
+<ul class="post-meta list-inline">
+    <li><a href="javascript:void(0);">All <span>(3)</span></a></li>
+    <li><a href="javascript:void(0);">Published <span>(3)</span></a></li>
+    <li><a href="javascript:void(0);" class="overlay-success">Featured <span>(3)</span></a></li>
+    <li><a href="javascript:void(0);" class="overlay-warning">Drafts <span>(3)</span></a></li>
+    <li><a href="javascript:void(0);" class="overlay-danger">Trash <span>(3)</span></a></li>
+</ul>
+
+<div class="form-inline">
+    <div class="form-group">
+        <input class="form-control" placeholder="Search"/>
+    </div>
+
+    <div class="form-group">
+        <select class="form-control">
+            <option>All Dates</option>
+            <option>August 2015</option>
+            <option>July 2015</option>
+        </select>
+
+        <button class="btn btn-sm btn-complete">Filter</button>
+    </div>
+</div>
+
+<div class="form-group">
+    <table id="table-post-list" class="table table-striped" data-sortable>
+        <thead>
+        <tr>
+            <th data-sortable="true">Title</th>
+            <th data-sortable="true" class="hidden-xs">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-repeat="row: stories">
+            <td class="post-title" data-value="Wedding of the Day">
+                <a v-link="/story/edit/{{row.id}}" class="title">{{row.title}}</a>
+
+                <div class="row-actions">
+                    <ul class="list-inline">
+                        <li><a v-link="/story/edit/{{row.id}}">Edit</a></li>
+                        <li><a href="single.php">View</a></li>
+                        <li v-if="row.featured == 0 && row.deleted_at == null"><a href="" class="overlay-success">Feature</a>
+                        </li>
+                        <li v-if="row.deleted_at == null"><a href="" class="overlay-danger">Trash</a></li>
+                    </ul>
+                </div>
+            </td>
+            <td class="post-date hidden-xs" data-value="{{row.created_at}}">
+                <span title="2015/07/02 8:46:55 am" style="display:block;margin-bottom:5px;">{{row.created_at}}</span>
+
+                <div>
+                    <span v-if="row.status == 'published' || row.status == 'draft'" class="label"
+                          v-class="label-warning: row.status == 'draft', label-primary: row.status == 'published'">{{row.status.charAt(0).toUpperCase() + row.status.slice(1)}}</span>
+                    <span v-if="row.featured == 1 && row.deleted_at == null" class="label label-success">Featured</span>
+                    <span v-if="row.deleted_at != null" class="label label-danger">Deleted</span>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
