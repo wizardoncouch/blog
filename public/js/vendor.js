@@ -11574,7 +11574,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /*
- * Cookies.js - 1.2.1
+ * Cookies.js - 1.2.2
  * https://github.com/ScottHamper/Cookies
  *
  * This is free and unencumbered software released into the public domain.
@@ -11610,8 +11610,10 @@ if (typeof jQuery === 'undefined') {
             if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
                 Cookies._renewCache();
             }
+            
+            var value = Cookies._cache[Cookies._cacheKeyPrefix + key];
 
-            return Cookies._cache[Cookies._cacheKeyPrefix + key];
+            return value === undefined ? undefined : decodeURIComponent(value);
         };
 
         Cookies.set = function (key, value, options) {
@@ -11694,9 +11696,19 @@ if (typeof jQuery === 'undefined') {
             // IE omits the "=" when the cookie value is an empty string
             separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
 
+            var key = cookieString.substr(0, separatorIndex);
+            var decodedKey;
+            try {
+                decodedKey = decodeURIComponent(key);
+            } catch (e) {
+                if (console && typeof console.error === 'function') {
+                    console.error('Could not decode cookie with key "' + key + '"', e);
+                }
+            }
+            
             return {
-                key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
-                value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
+                key: decodedKey,
+                value: cookieString.substr(separatorIndex + 1) // Defer decoding value until accessed
             };
         };
 
@@ -11735,7 +11747,7 @@ if (typeof jQuery === 'undefined') {
     }
 })(typeof window === 'undefined' ? this : window);
 /*!
- * Vue.js v0.12.13
+ * Vue.js v0.12.14
  * (c) 2015 Evan You
  * Released under the MIT License.
  */
@@ -11743,7 +11755,7 @@ if (typeof jQuery === 'undefined') {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(factory);
+		define([], factory);
 	else if(typeof exports === 'object')
 		exports["Vue"] = factory();
 	else
@@ -11906,7 +11918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Check is a string starts with $ or _
+	 * Check if a string starts with $ or _
 	 *
 	 * @param {String} str
 	 * @return {Boolean}
@@ -18102,7 +18114,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      while (i--) {
 	        var option = el.options[i]
 	        if (option !== defaultOption) {
-	          el.removeChild(option)
+	          var parentNode = option.parentNode
+	          if (parentNode === el) {
+	            parentNode.removeChild(option)
+	          } else {
+	            el.removeChild(parentNode)
+	            i = el.options.length
+	          }
 	        }
 	      }
 	      buildOptions(el, value)
@@ -19146,7 +19164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  getContainedComponents: function () {
-	    var vm = this.vm
+	    var vm = this._host || this.vm
 	    var start = this.start.nextSibling
 	    var end = this.end
 
@@ -20234,13 +20252,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    !value._isVue
 	  ) {
 	    ob = new Observer(value)
-	  } else if (true) {
-	    if (_.isObject(value) && !_.isArray(value) && !_.isPlainObject(value)) {
-	      _.warn(
-	        'Unobservable object found in data: ' +
-	        Object.prototype.toString.call(value)
-	      )
-	    }
 	  }
 	  if (ob && vm) {
 	    ob.addVm(vm)
