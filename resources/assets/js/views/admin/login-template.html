@@ -10,52 +10,55 @@
                         <img src="/images/logo-brandmark.svg" alt="logo" width="100" class="center-block"/>
                     </a>
 
-                    <form id="form-login" role="form" class="mg-20-t" action="index.html" novalidate="novalidate">
+                    <div class="alert alert-danger" role="alert" v-if="hasError">
+                        <div v-repeat="row: errors.values"><i class="fa fa-times"></i> &nbsp; {{ row }}</div>
+                    </div>
 
-                        <div class="row">
+                    <div class="row">
 
-                            <div class="col-sm-12">
-                                <div class="form-group form-group-default">
-                                    <label>Login</label>
-                                    <input type="text" name="username_or_email" placeholder="Username or Email Address"
-                                           class="form-control" required="" aria-required="true">
-                                </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default"
+                                 v-class="has-error: errors.fields.indexOf('user') > -1">
+                                <label>Login</label>
+                                <input type="text" name="user" placeholder="Username or Email Address"
+                                       class="form-control" required="" aria-required="true" v-model="login.user" v-on="keyup: doLogin| key 13">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--/ .row -->
+
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default"
+                                 v-class="has-error: errors.fields.indexOf('password') > -1">
+                                <label>Password</label>
+                                <input type="password" name="password" placeholder="Password" class="form-control"
+                                       required="" aria-required="true" v-model="login.password" v-on="keyup: doLogin| key 13">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--/ .row -->
+
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <div class="checkbox ">
+                                <input type="checkbox" id="remember" v-model="login.remember" />
+                                <label for="remember">Keep Me Signed in</label>
                             </div>
 
                         </div>
-                        <!--/ .row -->
-
-                        <div class="row">
-
-                            <div class="col-sm-12">
-                                <div class="form-group form-group-default">
-                                    <label>Password</label>
-                                    <input type="text" name="pass" placeholder="Credentials" class="form-control"
-                                           required="" aria-required="true">
-                                </div>
-                            </div>
-
+                        <div class="col-sm-6">
+                            <p class="text-sm-right small"><a v-link="{ path : 'forgotPassword' }" class="text-info">Lost
+                                Password?</a></p>
                         </div>
-                        <!--/ .row -->
+                    </div>
+                    <!--/ .row -->
 
-                        <div class="row">
-                            <div class="col-sm-6">
-
-                                <div class="checkbox ">
-                                    <input type="checkbox" value="1" id="checkbox1">
-                                    <label for="checkbox1">Keep Me Signed in</label>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-6">
-                                <p class="text-sm-right small"><a href="form-lost-password.php" class="text-info">Lost
-                                    Password?</a></p>
-                            </div>
-                        </div>
-                        <!--/ .row -->
-
-                        <button class="btn btn-complete" type="submit">Continue</button>
-                    </form>
+                    <button class="btn btn-complete" type="button" v-on="click: doLogin">Login</button>
 
                 </div>
                 <!--/ .col-md-12 -->

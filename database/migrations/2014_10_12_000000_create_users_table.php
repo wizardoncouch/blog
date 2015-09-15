@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->enum('permission',['personal', 'professional', 'admin', 'root'])->default('personal');
             $table->char('language', 2)->default('en');
             $table->string('activation_code')->nullable();
-            $table->string('avatar')->default('/images/default-profile.png');
+            $table->string('avatar')->default('/images/default-profile.jpg');
             $table->string('fb_id')->nullable();
             $table->timestamp('activated_at')->nullable();
             $table->timestamps();

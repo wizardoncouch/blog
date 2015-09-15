@@ -37,8 +37,15 @@ class AuthController extends Controller
             // Grab credentials from the request.
             $credentials = $request->only($field, 'password');
             $credentials['active'] = 1;
+
+            $claims = ['company' => 'NST'];
+            if ($request->has('remember')) {
+                if ($request->get('remember') == true) {
+                    $claims['exp'] = "" . strtotime("+1 year");
+                }
+            }
             // Attempt to verify the credentials and create a token for the user.
-            if ($token = JWTAuth::attempt($credentials)) {
+            if ($token = JWTAuth::attempt($credentials, $claims)) {
                 $response['code'] = 200;
                 $response['token'] = $token;
                 $response['data'] = JWTAuth::toUser($token);
@@ -205,8 +212,13 @@ class AuthController extends Controller
     {
         $response = [];
         try {
-            $response['text'] = JWTAuth::setToken($this->logged->token)->invalidate();
-            $response['code'] = 200;
+            if (JWTAuth::setToken($this->logged->token)->invalidate()) {
+                $response['text'] = 'Signed out';
+                $response['code'] = 200;
+            } else {
+                $response['text'] = 'Cannot sign out';
+                $response['code'] = 417;
+            }
         } catch (JWTException $e) {
             $response['text'] = $e->getMessage();
             $response['code'] = $e->getCode();

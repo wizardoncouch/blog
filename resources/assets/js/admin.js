@@ -10,6 +10,41 @@ var Login = Vue.extend({
     mixins: [LoginMixin]
 });
 
+var WholePage = Vue.extend({
+    template: require('./views/admin/template.html'),
+    data: function () {
+        return {
+            logged: {
+                name: '',
+                avatar: ''
+            }
+        }
+    },
+    methods: {
+        doLogout: function () {
+            var self = this;
+            $.ajax({
+                url: '/api/1.0/auth/signout',
+                method: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", Cookies.get('AdminAuth'));
+                }
+            }).always(function () {
+                localStorage.removeItem('AdminAuth');
+                localStorage.removeItem('AdminRemember');
+                localStorage.removeItem('AdminAvatar');
+                localStorage.removeItem('AdminName');
+                Cookies.expire('AdminAuth');
+                self.$route.router.go({name: 'login'});
+            });
+        }
+    },
+    compiled: function () {
+        this.logged.name = localStorage.getItem('AdminName');
+        this.logged.avatar = localStorage.getItem('AdminAvatar');
+    }
+});
+
 // Admin Dashboard
 //var DashMixin = require('./views/admin-dashboard');
 var Dashboard = Vue.extend({
@@ -24,10 +59,10 @@ var Dashboard = Vue.extend({
 });
 // Story Features
 //var StoryListMixin = require('./views/admin-stories');
-var StoryList = Vue.extend({
+var Stories = Vue.extend({
     //mixins: [StoryListMixin]
     template: '<div class="foo">' +
-    '<h2>This is Story List!</h2>' +
+    '<h2>This is Stories!</h2>' +
     '</div>'
 });
 
@@ -46,13 +81,19 @@ var StoryTags = Vue.extend({
     '</div>'
 });
 
-var UsersList = Vue.extend({
+var Categories = Vue.extend({
     //mixins: [StoryEditMixin]
     template: '<div class="foo">' +
-    '<h2>This is Users List!</h2>' +
+    '<h2>This is Categories!</h2>' +
     '</div>'
 });
 
+var Users = Vue.extend({
+    //mixins: [StoryEditMixin]
+    template: '<div class="foo">' +
+    '<h2>This is Categories!</h2>' +
+    '</div>'
+});
 
 // Admin Router
 var router = new VueRouter({
@@ -60,6 +101,7 @@ var router = new VueRouter({
     saveScrollPosition: true,
     root: '/admin'
 });
+
 router.redirect({
     '/': '/dashboard',
     '/story': '/stories',
@@ -70,9 +112,7 @@ router.redirect({
 // Router Map
 router.map({
     '/': {
-        component: {
-            template: require('./views/admin/template.html')
-        },
+        component: WholePage,
         subRoutes: {
             '/dashboard': {
                 name: 'dashboard',
@@ -81,7 +121,7 @@ router.map({
             },
             '/stories': {
                 name: 'storyList',
-                component: StoryList,
+                component: Stories,
                 auth: true
             },
             '/story/edit/:id': {
@@ -100,9 +140,31 @@ router.map({
                 auth: true
             },
 
+            '/categories': {
+                name: 'categories',
+                component: Categories,
+                auth: true
+            },
+
+            '/translator/translations': {
+                name: 'translations',
+                component: {
+                    template: 'Translations'
+                },
+                auth: true
+            },
+
+            '/translator/languages': {
+                name: 'languages',
+                component: {
+                    template: 'Languages'
+                },
+                auth: true
+            },
+
             '/users': {
                 name: 'users',
-                component: UsersList,
+                component: Users,
                 auth: true
             }
         }
@@ -113,16 +175,49 @@ router.map({
     }
 });
 router.beforeEach(function (transition) {
+    var auth = Cookies.get('AdminAuth');
+    var remember = localStorage.getItem('AdminRemember');
+    if (remember == 1) {
+        auth = localStorage.getItem('AdminAuth');
+    }
     if (transition.to.auth) {
-        // check authentication...
-        var auth = Cookies.get('AdminAuth');
         if (auth) {
-            transition.next();
+            if (remember == 0) {
+                $.ajax({
+                    url: '/api/1.0/auth/refresh',
+                    method: 'GET',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", auth);
+                    }
+                }).done(function (data, text, xhr) {
+                    var token = xhr.getResponseHeader('Authorization');
+                    if (remember == 1) {
+                        localStorage.setItem('AdminAuth', token);
+                    } else {
+                        Cookies.set('AdminAuth', token);
+                    }
+                    transition.next();
+                }).fail(function () {
+                    localStorage.removeItem('AdminAuth');
+                    localStorage.removeItem('AdminRemember');
+                    localStorage.removeItem('AdminAvatar');
+                    localStorage.removeItem('AdminName');
+                    Cookies.expire('AdminAuth');
+                    transition.redirect('/login');
+                });
+            } else {
+                Cookies.set('AdminAuth', auth);
+                transition.next();
+            }
         } else {
             transition.redirect('/login');
         }
     } else {
-        transition.next();
+        if (transition.to.path == '/login' && auth) {
+            transition.redirect('/dashboard');
+        } else {
+            transition.next();
+        }
     }
 })
 router.start(app, 'body');

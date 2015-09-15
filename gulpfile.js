@@ -14,7 +14,6 @@ var elixir = require('laravel-elixir');
 var paths = {
     'jquery': './vendor/bower_components/jquery/',
     'vue': './vendor/bower_components/vue/',
-    'resource': './vendor/bower_components/vue-resource/',
     'router': './vendor/bower_components/vue-router/',
     'bootstrap': './vendor/bower_components/bootstrap-sass/assets/',
     'fontawesome': './vendor/bower_components/font-awesome/',
@@ -33,7 +32,6 @@ elixir(function (mix) {
         paths.bootstrap + "javascripts/bootstrap.js",
         paths.cookies + "dist/cookies.js",
         paths.vue + "dist/vue.js",
-        paths.resource + "dist/vue-resource.js",
         paths.router + "dist/vue-router.js",
         paths.tagsinput + "dist/bootstrap-tagsinput.js",
         paths.typeahead + "bootstrap3-typeahead.js",
