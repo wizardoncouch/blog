@@ -24,9 +24,10 @@ var paths = {
 }
 elixir(function (mix) {
     mix.sass("*.*", 'public/css/app.css', {includePaths: [paths.bootstrap + 'stylesheets', paths.fontawesome + 'scss', paths.bourbon + 'stylesheets']});
-    mix.styles(['public/css/app.css', 'public/css/scrollbar.min.css', paths.tagsinput + 'dist/bootstrap-tagsinput.css'], 'public/css/app.css', './').version('public/css/app.css');
+    mix.styles(['public/css/app.css', 'resources/assets/sass/vendor/scrollbar.min.css', paths.tagsinput + 'dist/bootstrap-tagsinput.css'], 'public/css/app.css', './');//.version('public/css/app.css');
     mix.copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts/bootstrap')
-        .copy(paths.fontawesome + 'fonts/**', 'public/fonts/fontawesome');
+        .copy(paths.fontawesome + 'fonts/**', 'public/fonts/fontawesome')
+        .copy('resources/assets/tinymce/**', 'public/tinymce');
     mix.scripts([
         paths.jquery + "dist/jquery.js",
         paths.bootstrap + "javascripts/bootstrap.js",
@@ -43,10 +44,10 @@ elixir(function (mix) {
         .browserify('default.js', 'public/js/default.js')
         .browserify('user.js', 'public/js/user.js')
         .browserify('admin.js', 'public/js/admin.js')
-        .version([
-            'js/vendor.js',
-            'js/default.js',
-            'js/user.js',
-            'js/admin.js'
-        ]);
+        /*.version([
+         'js/vendor.js',
+         'js/default.js',
+         'js/user.js',
+         'js/admin.js'
+         ])*/;
 });

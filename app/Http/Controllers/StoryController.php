@@ -4,19 +4,78 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
 class StoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $limit = $request->get('limit') ?: $this->app_list_limit;
+        $filter = null;
+        if ($request->has('filter')) {
+            $filter = $request->get('filter');
+        }
+        switch ($filter) {
+            case 'featured':
+                $stories = Story::with('user')->whereFeatured(1);
+                break;
+            case 'popular':
+                $stories = Story::with('user')->orderBy(\DB::raw('rand()'));
+                break;
+            case 'recent':
+                $stories = Story::with('user')->orderBy('created_at', 'desc');
+                break;
+            default:
+                $stories = Story::with('user');
+        }
+
+        if (!$stories) {
+            $stories = Story::with('user');
+        }
+        $stories = $stories->paginate($limit);
+
+        $stories->each(function ($story) {
+            if (empty($story->excerpt)) {
+                //extract the body..
+                $text = trim(strip_tags($story->content));
+                if (mb_strlen($text) != strlen($text)) {
+                    if (mb_strlen($text) > 100) {
+                        $text = mb_substr($text, 0, 100) . ' ...';
+                    }
+                } else {
+                    if (strlen($text) > 200) {
+                        $text = substr($text, 0, 200) . ' ...';
+                    }
+                }
+                $story->excerpt = $text;
+            }
+
+            //extract images
+            $dom = new \domDocument;
+            $dom->loadHTML($story->content);
+            $dom->preserveWhiteSpace = false;
+            $image_tags = $dom->getElementsByTagName('img');
+            $images = [];
+            foreach ($image_tags as $img) {
+                $images[] = $img->getAttribute('src');
+            }
+
+            if (empty($story->default_image) && count($images) > 0) {
+                $story->default_image = $images[0];
+            }
+            if (filter_var($story->default_image, FILTER_VALIDATE_URL) === false) {
+                $story->default_image = '/' . $story->default_image;
+            }
+
+            $story->images = $images;
+        });
+
+        return $this->xhr($stories, true);
+
     }
 
     /**
@@ -32,7 +91,7 @@ class StoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return Response
      */
     public function store(Request $request)
@@ -43,7 +102,7 @@ class StoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
@@ -54,7 +113,7 @@ class StoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -65,8 +124,8 @@ class StoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param  Request $request
+     * @param  int $id
      * @return Response
      */
     public function update(Request $request, $id)
@@ -77,7 +136,7 @@ class StoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)

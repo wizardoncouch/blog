@@ -9260,7 +9260,7 @@ select {
 /* End of Scrollbar */
 body {
   margin-top: 100px;
-  background-color: #fff; }
+  background-color: #f1f1f1; }
 
 @media (min-width: 768px) {
   body {
@@ -9272,7 +9272,7 @@ body {
 #page-wrapper {
   width: 100%;
   padding: 0;
-  background-color: #fff; }
+  background-color: #f1f1f1; }
 
 .huge {
   font-size: 50px;
@@ -9449,7 +9449,7 @@ ul.alert-dropdown {
   font-size: 25px;
   font-weight: 400;
   line-height: 29px; }
-  .post-editor h2 a.add-new-h2 {
+  .post-editor h2 a.add-story-h2 {
     margin-left: 4px;
     padding: 4px 8px;
     position: relative;
@@ -9463,11 +9463,29 @@ ul.alert-dropdown {
     font-family: "Open Sans", sans-serif;
     -khtml-border-radius: 2px;
     border-radius: 2px; }
-    .post-editor h2 a.add-new-h2:hover {
+    .post-editor h2 a.add-story-h2:hover {
       background-color: #48b0f7;
       color: #fff; }
+  .post-editor h2 a.cancel-story-h2 {
+    margin-left: 4px;
+    padding: 4px 8px;
+    position: relative;
+    top: -3px;
+    text-decoration: none;
+    border: none;
+    background-color: rgba(245, 87, 83, 0.2);
+    color: #f55753;
+    text-shadow: none;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: "Open Sans", sans-serif;
+    -khtml-border-radius: 2px;
+    border-radius: 2px; }
+    .post-editor h2 a.cancel-story-h2:hover {
+      background-color: #f55753;
+      color: #fff; }
 
-.post-editor #post-title {
+.post-editor .post-title {
   font-size: 1.3em;
   color: #333; }
 

@@ -29,6 +29,23 @@ Route::group(['prefix' => 'api/1.0'], function () {
 
         Route::get('signout', ['middleware' => 'jwt.auth', 'uses' => 'AuthController@signout']);
     });
+
+    Route::group(['prefix' => 'category'], function () {
+        Route::get('all', 'CategoryController@index');
+        Route::get('{id}', 'CategoryController@show');
+        Route::post('create', [
+            'middleware' => 'auth.token',
+            'uses'       => 'CategoryController@store'
+        ]);
+        Route::post('update', [
+            'middleware' => 'auth.token',
+            'uses'       => 'CategoryController@store'
+        ]);
+        Route::post('delete', [
+            'middleware' => 'auth.token',
+            'uses'       => 'CategoryController@destroy'
+        ]);
+    });
 });
 
 /***** frontend routes *****/

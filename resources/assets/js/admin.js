@@ -63,12 +63,9 @@ var Stories = Vue.extend({
     mixins: [StoriesMixin]
 });
 
-//var StoryEditMixin = require('./views/admin-story-edit');
-var StoryEdit = Vue.extend({
-    //mixins: [StoryEditMixin]
-    template: '<div class="foo">' +
-    '<h2>This is Story Edit!</h2>' +
-    '</div>'
+var EditStoryMixin = require('./views/admin/story');
+var EditStory = Vue.extend({
+    mixins: [EditStoryMixin]
 });
 
 var StoryTags = Vue.extend({
@@ -123,12 +120,12 @@ router.map({
             },
             '/story/edit/:id': {
                 name: 'storyEdit',
-                component: StoryEdit,
+                component: EditStory,
                 auth: true
             },
             '/story/new': {
                 name: 'storyNew',
-                component: StoryEdit,
+                component: EditStory,
                 auth: true
             },
             '/story/tags': {

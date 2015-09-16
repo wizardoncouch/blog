@@ -10,17 +10,16 @@
     <meta name="author" content="NST Pictures Cebu">
 
     <title>BG</title>
-
     <!-- Application CSS -->
     <link href="/css/app.css" rel="stylesheet" type="text/css">
-
-    <!-- Scrollbar CSS -->
-    <link href="/css/scrollbar.min.css" rel="stylesheet" type="text/css">
 
 </head>
 
 <body>
 <router-view></router-view>
+
+<!-- Tinymce -->
+<script type="text/javascript" src="/tinymce/tinymce.min.js"></script>
 
 <!-- Vendor -->
 <script src="/js/vendor.js"></script>

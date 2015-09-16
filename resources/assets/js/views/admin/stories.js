@@ -8,7 +8,7 @@ module.exports = {
             stories: []
         }
     },
-    created: function () {
+    ready: function () {
         this.getStories();
     },
     methods: {
@@ -18,7 +18,7 @@ module.exports = {
                 url: '/api/1.0/stories',
                 method: 'GET'
             }).done(function (result) {
-                self.stories = result.data.items;
+                //self.stories = result.data.items;
             });
         }
     }

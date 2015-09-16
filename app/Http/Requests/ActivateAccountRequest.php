@@ -26,4 +26,15 @@ class ActivateAccountRequest extends Request
             'code'  => 'required|exists:users,activation_code'
         ];
     }
+
+    /**
+     * @param array $errors
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function response(array $errors)
+    {
+        $errors = array_merge(['code' => 422], $errors);
+
+        return response()->json($errors);
+    }
 }
