@@ -20,7 +20,7 @@ class CreateTableStories extends Migration
             $table->string('title');
             $table->text('content')->nullable();
             $table->text('excerpt')->nullable();
-            $table->string('keywords')->nullable();
+            $table->json('keywords')->nullable();
             $table->string('default_image')->nullable();
             $table->boolean('published');
             $table->timestamps();

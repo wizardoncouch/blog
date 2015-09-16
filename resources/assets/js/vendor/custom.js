@@ -26,6 +26,27 @@ Vue.directive('trans', {
     }
 });
 
+Vue.directive('chosen', {
+    twoWay: true, // note the two-way binding
+    bind: function () {
+        $(this.el)
+            .chosen({
+                inherit_select_classes: true,
+                width: '100%',
+                disable_search_threshold: 999
+            })
+            .change(function (ev) {
+                // two-way set
+                this.set(this.el.value);
+            }.bind(this));
+    },
+    update: function (nv, ov) {
+        // note that we have to notify chosen about update
+        $(this.el).trigger("chosen:updated");
+    }
+});
+
+
 /****THIS IS USED FOR LOGIN WITH FACEBOOK IN LOGIN OR REGISTER PAGE*****/
 
 var pathArray = window.location.pathname.split('/');
@@ -60,8 +81,7 @@ if (page == 'signin' || page == 'signup') {
 }
 
 
-
-var tinymceConfig= {
+var tinymceConfig = {
     "default": {
         theme: "modern",
         skin: 'light',

@@ -39,7 +39,7 @@ abstract class Controller extends BaseController
         $response = [];
         $response['code'] = $code;
 
-        if (is_array($data) && count($data) > 0) {
+        if ((is_object($data) || is_array($data)) && count($data) > 0) {
             if ($paginate) {
                 $response['paginator'] = [
                     'total_count'  => $data->total(),

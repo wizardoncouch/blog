@@ -36,7 +36,7 @@ $darker-menu: #272b35;
 $dark-menu: #2B303B;
 
 $link: #337ab7;
-$link-hover: rgba( $link, 0.90 );
+$link-hover: rgba($link, 0.90);
 $link-active: #316C9E;
 
 $text: #626262;
@@ -55,22 +55,21 @@ $instagram: #517FA6;
 $google-plus: #D34836;
 $pinterest: #CB2026;
 
-/** 
+/**
  * Fonts
  */
 
-$base-font-size		: 16px;
-$font-montserrat	: 'Montserrat', sans-serif;
-$font-open-sans		: 'Open Sans', sans-serif;
-
+$base-font-size: 16px;
+$font-montserrat: 'Montserrat', sans-serif;
+$font-open-sans: 'Open Sans', sans-serif;
 
 /**
  * Media Query Break Points
  */
 
-$screen-xs		: 270px;
-$screen-phablet	: 600px;
-$screen-sm		: 768px;
-$screen-md 		: 992px;
-$screen-lg 		: 1200px;
-$screen-xlg 	: 1400px;
+$screen-xs: 270px;
+$screen-phablet: 600px;
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-lg: 1200px;
+$screen-xlg: 1400px;

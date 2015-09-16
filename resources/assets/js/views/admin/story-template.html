@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-sm-8 col-md-9">
-        <h2 class="page-header">
+        <h2>
             <span>{{ $route.params.id > 0 ? 'Edit Story' : 'Add New Story' }}</span>
-            <a v-link="{ name : 'storyList' }" class="cancel-story-h2">Cancel</a>
+            <a v-link="{ name : 'storyList' }" class="cancel-btn">Cancel</a>
         </h2>
 
         <div class="form-group mg-20-b">
@@ -30,6 +30,10 @@
                      aria-labelledby="headingOne">
                     <div class="panel-body">
                         <div class="checkbox mg-20-b">
+                            <input type="checkbox" id="publish-story" v-model="story.published"/>
+                            <label for="publish-story">Published</label>
+                        </div>
+                        <div class="checkbox mg-20-b">
                             <input type="checkbox" id="story-featured" v-model="story.featured"/>
                             <label for="story-featured">Featured</label>
                         </div>
@@ -37,21 +41,11 @@
                             <textarea class="form-control" rows="3" cols="10" v-model="story.excerpt"
                                       placeholder="Add optional story excerpt or summary."></textarea>
                         </div>
-                        <div class="checkbox mg-20-b">
-                            <input type="checkbox" id="publish-story" v-model="story.published"/>
-                            <label for="publish-story">Published</label>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div>
-            <button class="btn btn-sm btn-primary pull-left">Save</button>
-            <button class="btn btn-sm btn-link pull-right overlay-danger">Move to Trash</button>
-            <button class="btn btn-sm btn-link pull-right overlay-danger" alt="Delete Permanently">
-                Delete
-            </button>
-        </div>
+
     </div>
     <div class="col-sm-4 col-md-3">
 
@@ -87,7 +81,8 @@
                                     <i class="fa fa-fw fa-user"></i> Author: <strong>{{ story.author }}</strong>
                                 </li>
                                 <li>
-                                    <i class="fa fa-fw fa-calendar"></i> Created at: <strong>{{ story.created }}</strong>
+                                    <i class="fa fa-fw fa-calendar"></i> Created at: <strong>{{ story.created
+                                    }}</strong>
                                 </li>
                             </ul>
                         </div>
@@ -106,24 +101,19 @@
                     <div id="collapseCategory" class="panel-collapse collapse in" role="tabpanel"
                          aria-labelledby="headingCategory">
                         <div class="panel-body">
-                            <div class="tablist">
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                            id="dropdownCategoriesMenu" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                        {{ indicators.category }}
-                                        <span class="caret"></span>
-                                    </button>
+                            <select data-placeholder="Select Category" v-model="story.category_id" options="categories"
+                                    v-chosen="category: categories"></select>
+                            <button class="btn btn-sm btn-link" role="button" data-toggle="collapse"
+                                    href="#collapseAddCategory" aria-expanded="false"
+                                    aria-controls="collapseAddCategory">+ Add New Category
+                            </button>
 
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownCategoriesMenu">
-                                        <li v-repeat="row:categories"><a href="javascript:void(0);"
-                                                                         v-on="click: modifyCategory($index)">{{row.name}}</a>
-                                        </li>
-                                    </ul>
+                            <div class="collapse form-inline" id="collapseAddCategory">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Category Name"/>
+                                    <button class="btn">Add Category</button>
                                 </div>
                             </div>
-                            <!--/ .tablist-->
-
                         </div>
                     </div>
                 </div>
@@ -139,10 +129,9 @@
                     <div id="collapseKeywords" class="panel-collapse collapse in" role="tabpanel"
                          aria-labelledby="headingKeywords">
                         <div class="panel-body">
-                            <div class="form-group">
-                                <p class="help-block">Separated by comma(<b>,</b>)</p>
-                                <input type="text" id="post-keywords" v-model="story.keywords" class="form-control"/>
-                            </div>
+                            <select data-placeholder="Select Keywords" multiple v-model="story.keywords"
+                                    options="keywords"
+                                    v-chosen="keyword: keywords"></select>
                         </div>
                     </div>
                 </div>
@@ -179,6 +168,20 @@
                 </div>
                 <!--/ .panel -->
 
+                <div class="panel panel-default">
+                    <button class="btn btn-sm btn-primary pull-left">Save</button>
+                    <button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"
+                            alt="Move to Trash">
+                        Move to Trash
+                    </button>
+                    <button class="btn btn-sm btn-link pull-right overlay-danger"
+                            v-if="story.published == 0 && story.id > 0"
+                            alt="Delete Permanently">
+                        Delete
+                    </button>
+                </div>
+                <!--/ .panel -->
+
             </div>
 
         </aside>
@@ -196,114 +199,92 @@
                 <h4 class="modal-title" id="modal-media-label">Insert Media</h4>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class=""><a href="#upload-files" aria-controls="upload-files" role="tab"
-                                                        data-toggle="tab" aria-expanded="false">Add Files</a></li>
-                    <li role="presentation" class="active"><a href="#media-library" aria-controls="upload-files"
-                                                              role="tab" data-toggle="tab" aria-expanded="false">Media
-                        Library</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane mg-20-y" id="upload-files">
-                        <div class="pad-20 text-center table-row" id="photo-uploader">
-
-                            <div class="file-upload-button table-cell">
-                                <h4>Drop files anywhere to upload</h4>
-
-                                <p>Or,</p>
-                                <button class="btn btn-primary" id="upload-ideabook-photos-btn">Upload Photo</button>
-                                <input type="file" name="image-upload" class="hide" id="upload-ideabook-photos-input">
-                            </div>
-
-                        </div>
-                    </div>
-                    <!--/ .upload-files -->
-                    <div role="tabpanel" class="tab-pane mg-20-y active" id="media-library">
-                        <div class="row full-height">
-                            <div class="col-sm-8 col-md-9 col-lg-10 full-height">
-                                <ul class="menu scrollable clearfix">
-                                    <li class="attachment" role="checkbox">
-                                        <div class="attachment-preview">
-                                            <div class="thumbnail">
-                                                <div class="centered">
-                                                    <img src="./images/gallery-01.jpg" draggable="false" alt="">
-                                                </div>
-                                            </div>
+                <div class="row full-height">
+                    <div class="col-sm-8 col-md-9 col-lg-10 full-height">
+                        <ul class="menu scrollable clearfix">
+                            <li class="attachment" role="checkbox">
+                                <div class="attachment-preview">
+                                    <div class="thumbnail">
+                                        <div class="centered">
+                                            <img src="./images/gallery-01.jpg" draggable="false" alt="">
                                         </div>
-                                        <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                                class="icon"></i></a>
-                                    </li>
-                                    <li class="attachment selected" role="checkbox">
-                                        <div class="attachment-preview">
-                                            <div class="thumbnail">
-                                                <div class="centered">
-                                                    <img src="./images/gallery-02.jpg" draggable="false" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                                class="icon"></i></a>
-                                    </li>
-                                    <li class="attachment" role="checkbox">
-                                        <div class="attachment-preview">
-                                            <div class="thumbnail">
-                                                <div class="centered">
-                                                    <img src="./images/gallery-03.jpg" draggable="false" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                                class="icon"></i></a>
-                                    </li>
-                                    <li class="attachment" role="checkbox">
-                                        <div class="attachment-preview">
-                                            <div class="thumbnail">
-                                                <div class="centered">
-                                                    <img src="./images/gallery-04.jpg" draggable="false" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                                class="icon"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="col-sm-4 col-md-3 col-lg-2 full-height hidden-xs">
-                                <div class="attachment-details scrollable">
-                                    <h4>Attachment Details</h4>
-
-                                    <div class="form-group form-group-default">
-                                        <label>Title</label>
-                                        <input type="text" class="form-control" placeholder="Title goes here"/>
-                                    </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Caption</label>
-                                        <textarea class="form-control no-resize" placeholder="Say something awesome"
-                                                  rows="5" cols="5"/></textarea>
-                                    </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Alt Text</label>
-                                        <input type="text" class="form-control" placeholder="Alt goes here"/>
-                                    </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Description</label>
-                                        <textarea class="form-control no-resize" placeholder="Say something awesome"
-                                                  rows="5" cols="5"/></textarea>
                                     </div>
                                 </div>
+                                <a class="check" role="button" title="Deselect" tabindex="0"><i
+                                        class="icon"></i></a>
+                            </li>
+                            <li class="attachment selected" role="checkbox">
+                                <div class="attachment-preview">
+                                    <div class="thumbnail">
+                                        <div class="centered">
+                                            <img src="./images/gallery-02.jpg" draggable="false" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="check" role="button" title="Deselect" tabindex="0"><i
+                                        class="icon"></i></a>
+                            </li>
+                            <li class="attachment" role="checkbox">
+                                <div class="attachment-preview">
+                                    <div class="thumbnail">
+                                        <div class="centered">
+                                            <img src="./images/gallery-03.jpg" draggable="false" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="check" role="button" title="Deselect" tabindex="0"><i
+                                        class="icon"></i></a>
+                            </li>
+                            <li class="attachment" role="checkbox">
+                                <div class="attachment-preview">
+                                    <div class="thumbnail">
+                                        <div class="centered">
+                                            <img src="./images/gallery-04.jpg" draggable="false" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="check" role="button" title="Deselect" tabindex="0"><i
+                                        class="icon"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-4 col-md-3 col-lg-2 full-height hidden-xs">
+                        <div class="attachment-details scrollable">
+                            <h4>Attachment Details</h4>
+
+                            <div class="form-group form-group-default">
+                                <label>Title</label>
+                                <input type="text" class="form-control" placeholder="Title goes here"/>
+                            </div>
+                            <div class="form-group form-group-default">
+                                <label>Caption</label>
+                                        <textarea class="form-control no-resize" placeholder="Say something awesome"
+                                                  rows="5" cols="5"/></textarea>
+                            </div>
+                            <div class="form-group form-group-default">
+                                <label>Alt Text</label>
+                                <input type="text" class="form-control" placeholder="Alt goes here"/>
+                            </div>
+                            <div class="form-group form-group-default">
+                                <label>Description</label>
+                                        <textarea class="form-control no-resize" placeholder="Say something awesome"
+                                                  rows="5" cols="5"/></textarea>
                             </div>
                         </div>
-
                     </div>
-                    <!--/ .media-library-->
+
                 </div>
             </div>
             <!--/ .modal-body -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-complete">Insert</button>
+                <div class="pull-sm-left">
+                    <button type="button" class="btn btn-primary">Upload Image</button>
+                </div>
+                <div class="pull-sm-right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-complete">Done</button>
+                </div>
             </div>
         </div>
     </div>

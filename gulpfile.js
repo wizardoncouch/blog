@@ -18,13 +18,11 @@ var paths = {
     'bootstrap': './vendor/bower_components/bootstrap-sass/assets/',
     'fontawesome': './vendor/bower_components/font-awesome/',
     'cookies': './vendor/bower_components/cookies-js/',
-    'bourbon': './vendor/bower_components/bourbon/app/assets/',
-    'tagsinput': './vendor/bower_components/bootstrap-tagsinput/',
-    'typeahead': './vendor/bower_components/bootstrap3-typeahead/',
+    'bourbon': './vendor/bower_components/bourbon/app/assets/'
 }
 elixir(function (mix) {
     mix.sass("*.*", 'public/css/app.css', {includePaths: [paths.bootstrap + 'stylesheets', paths.fontawesome + 'scss', paths.bourbon + 'stylesheets']});
-    mix.styles(['public/css/app.css', 'resources/assets/sass/vendor/scrollbar.min.css', paths.tagsinput + 'dist/bootstrap-tagsinput.css'], 'public/css/app.css', './');//.version('public/css/app.css');
+    mix.styles(['public/css/app.css', 'resources/assets/sass/vendor/scrollbar.min.css'], 'public/css/app.css', './');//.version('public/css/app.css');
     mix.copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts/bootstrap')
         .copy(paths.fontawesome + 'fonts/**', 'public/fonts/fontawesome')
         .copy('resources/assets/tinymce/**', 'public/tinymce');
@@ -34,11 +32,10 @@ elixir(function (mix) {
         paths.cookies + "dist/cookies.js",
         paths.vue + "dist/vue.js",
         paths.router + "dist/vue-router.js",
-        paths.tagsinput + "dist/bootstrap-tagsinput.js",
-        paths.typeahead + "bootstrap3-typeahead.js",
         "resources/assets/js/vendor/ie10-viewport-bug-workaround.js",
         "resources/assets/js/vendor/scrollbar.min.js",
         "resources/assets/js/vendor/modernizr.min.js",
+        "resources/assets/js/vendor/chosen.js",
         "resources/assets/js/vendor/custom.js"
     ], 'public/js/vendor.js', './')
         .browserify('default.js', 'public/js/default.js')

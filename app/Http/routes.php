@@ -46,6 +46,23 @@ Route::group(['prefix' => 'api/1.0'], function () {
             'uses'       => 'CategoryController@destroy'
         ]);
     });
+
+    Route::group(['prefix' => 'keyword'], function () {
+        Route::get('all', 'KeywordController@index');
+        Route::get('{id}', 'KeywordController@show');
+        Route::post('create', [
+            'middleware' => 'auth.token',
+            'uses'       => 'KeywordController@store'
+        ]);
+        Route::post('update', [
+            'middleware' => 'auth.token',
+            'uses'       => 'KeywordController@store'
+        ]);
+        Route::post('delete', [
+            'middleware' => 'auth.token',
+            'uses'       => 'KeywordController@destroy'
+        ]);
+    });
 });
 
 /***** frontend routes *****/
