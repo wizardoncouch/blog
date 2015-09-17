@@ -14,10 +14,18 @@ class CategoryController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // Return all categories
-        $categories = Category::all();
+        if ($request->has('filter')) {
+            switch ($request->get('filter')) {
+                case 'show':
+                    $categories = Category::whereShow(1)->get();
+                    break;
+            }
+        } else {
+            $categories = Category::all();
+        }
 
         return $this->xhr($categories);
     }

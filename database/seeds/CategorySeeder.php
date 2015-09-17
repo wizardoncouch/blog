@@ -21,6 +21,20 @@ class CategorySeeder extends Seeder
                 [
                     'id'          => 1,
                     'user_id'     => $footless->id,
+                    'name'        => 'Other',
+                    'description' => 'Default Category',
+                    'show'        => 0,
+                    'created_at'  => Carbon::now(),
+                    'updated_at'  => Carbon::now()
+
+                ]
+            ]
+        );
+        DB::table('categories')->insert(
+            [
+                [
+                    'id'          => 2,
+                    'user_id'     => $footless->id,
                     'name'        => 'Wedding Ceremony Hall',
                     'description' => 'Your reception site sets the stage for the entire party.'
                         . 'Think about your wedding style, your guest list size and '
@@ -30,7 +44,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 2,
+                    'id'          => 3,
                     'user_id'     => $footless->id,
                     'name'        => 'Party Decoration',
                     'description' => 'Create a fantastic party full of bright colours with'
@@ -40,7 +54,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 3,
+                    'id'          => 4,
                     'user_id'     => $footless->id,
                     'name'        => 'Food & Drink',
                     'description' => 'The Perfect Cocktail Party: Delightful Food and Drink.',
@@ -49,7 +63,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 4,
+                    'id'          => 5,
                     'user_id'     => $footless->id,
                     'name'        => 'Wedding Dress',
                     'description' => 'Browse our elegant collection of affordable wedding dresses at Davids Bridal',
@@ -58,7 +72,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 5,
+                    'id'          => 6,
                     'user_id'     => $footless->id,
                     'name'        => 'Bridal Bouquet',
                     'description' => 'Ivory Rose and Ranunculus Bridal Bouquet ... Bold Purple and Fuchsia Bridal'
@@ -68,7 +82,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 6,
+                    'id'          => 7,
                     'user_id'     => $footless->id,
                     'name'        => 'Hair Style and Accessory',
                     'description' => 'he fast-track to pretty party hair? A sparkling accessory of course!'
@@ -78,7 +92,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 7,
+                    'id'          => 8,
                     'user_id'     => $footless->id,
                     'name'        => 'Wedding Cake',
                     'description' => 'Browse the most creative wedding cake photos and designs for a sweet and unique dessert table',
@@ -87,7 +101,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 8,
+                    'id'          => 9,
                     'user_id'     => $footless->id,
                     'name'        => 'Gift',
                     'description' => 'A gift or a present is an item given to someone without the expectation of payment.'
@@ -97,7 +111,7 @@ class CategorySeeder extends Seeder
 
                 ],
                 [
-                    'id'          => 9,
+                    'id'          => 10,
                     'user_id'     => $footless->id,
                     'name'        => 'Paper Item',
                     'description' => 'simple item object for use in menus. When the user touches the item,'

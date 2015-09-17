@@ -38,20 +38,27 @@
         <tbody>
         <tr v-repeat="row: stories">
             <td class="post-title" data-value="Wedding of the Day">
-                <a v-link="/story/edit/{{row.id}}" class="title">{{row.title}}</a>
+                <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="title">{{row.title}}</a>
 
                 <div class="row-actions">
                     <ul class="list-inline">
-                        <li><a v-link="/story/edit/{{row.id}}">Edit</a></li>
-                        <li><a href="single.php">View</a></li>
-                        <li v-if="row.featured == 0 && row.deleted_at == null"><a href="" class="overlay-success">Feature</a>
+                        <li>
+                            <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="overlay-success"><i class="fa fa-pencil"></i></a>
                         </li>
-                        <li v-if="row.deleted_at == null"><a href="" class="overlay-danger">Trash</a></li>
+                        <li>
+                            <a href="/story/{{ row.id }}/{{ row.uri_title }}" class="overlay-link"><i class="fa fa-eye"></i></a>
+                        </li>
+                        <li v-if="row.featured == 0 && row.deleted_at == null">
+                            <a href="" class="overlay-success"><i class="fa fa-star"></i></a>
+                        </li>
+                        <li v-if="row.deleted_at == null">
+                            <a href="" class="overlay-danger"><i class="fa fa-trash"></i></a>
+                        </li>
                     </ul>
                 </div>
             </td>
             <td class="post-date hidden-xs" data-value="{{row.created_at}}">
-                <span title="2015/07/02 8:46:55 am" style="display:block;margin-bottom:5px;">{{row.created_at}}</span>
+                <span title="2015/07/02 8:46:55 am" style="display:block;margin-bottom:5px;">{{row.created}}</span>
 
                 <div>
                     <span v-if="row.status == 'published' || row.status == 'draft'" class="label"

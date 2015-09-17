@@ -28,9 +28,15 @@ abstract class Controller extends BaseController
         }
     }
 
+    /**
+     * @param $data
+     * @param bool|integer $codeOrPaginate
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function xhr($data, $codeOrPaginate = false)
     {
         $code = 200;
+        $paginate = false;
         if (!is_bool($codeOrPaginate)) {
             $code = $codeOrPaginate;
         } else {

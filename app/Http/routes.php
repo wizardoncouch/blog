@@ -30,8 +30,25 @@ Route::group(['prefix' => 'api/1.0'], function () {
         Route::get('signout', ['middleware' => 'jwt.auth', 'uses' => 'AuthController@signout']);
     });
 
+    Route::get('stories', 'StoryController@index');
+    Route::group(['prefix' => 'story'], function () {
+        Route::get('{id}', 'StoryController@show');
+        Route::post('create', [
+            'middleware' => 'auth.token',
+            'uses'       => 'StoryController@store'
+        ]);
+        Route::post('update', [
+            'middleware' => 'auth.token',
+            'uses'       => 'StoryController@store'
+        ]);
+        Route::post('delete', [
+            'middleware' => 'auth.token',
+            'uses'       => 'StoryController@destroy'
+        ]);
+    });
+
+    Route::get('categories', 'CategoryController@index');
     Route::group(['prefix' => 'category'], function () {
-        Route::get('all', 'CategoryController@index');
         Route::get('{id}', 'CategoryController@show');
         Route::post('create', [
             'middleware' => 'auth.token',
@@ -47,8 +64,8 @@ Route::group(['prefix' => 'api/1.0'], function () {
         ]);
     });
 
+    Route::get('keywords', 'KeywordController@index');
     Route::group(['prefix' => 'keyword'], function () {
-        Route::get('all', 'KeywordController@index');
         Route::get('{id}', 'KeywordController@show');
         Route::post('create', [
             'middleware' => 'auth.token',

@@ -68,13 +68,13 @@
                             <ul class="list-menu">
                                 <li>
                                     <i class="fa fa-fw fa-pencil"></i> Status:
-                                    <span class="label"
-                                          v-class=" label-warning: story.published  == 0,
-                                                    label-primary: story.published == 1,
-                                                    label-danger: story.deleted_at != null">
-                                        <strong>{{ status }}</strong>
+                                    <span class="label" v-if="story.status.length > 0"
+                                          v-class=" label-warning: story.status == 'draft' || story.status == 'new',
+                                                    label-primary: story.status == 'published',
+                                                    label-danger: story.status == 'trashed'">
+                                        <strong>{{ ucwords(story.status) }}</strong>
                                     </span> &nbsp;
-                                    <span v-if="story.featured == 1 && story.published == 1"
+                                    <span v-if="story.featured == 1"
                                           class="label label-success"><strong>Featured</strong></span>
                                 </li>
                                 <li>
@@ -103,17 +103,6 @@
                         <div class="panel-body">
                             <select data-placeholder="Select Category" v-model="story.category_id" options="categories"
                                     v-chosen="category: categories"></select>
-                            <button class="btn btn-sm btn-link" role="button" data-toggle="collapse"
-                                    href="#collapseAddCategory" aria-expanded="false"
-                                    aria-controls="collapseAddCategory">+ Add New Category
-                            </button>
-
-                            <div class="collapse form-inline" id="collapseAddCategory">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Category Name"/>
-                                    <button class="btn">Add Category</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,17 +137,17 @@
                     <div id="collapseFeaturedImage" class="panel-collapse collapse in" role="tabpanel"
                          aria-labelledby="headingThree">
                         <div class="panel-body">
-                            <div class="open-modal-media" v-if="false">
+                            <div class="open-modal-media" v-if="story.default_image.length == 0">
                                 <button class="btn btn-sm btn-link center-block upload-media-btn" data-toggle="modal"
                                         data-target="#modal-media">Set Featured Image
                                 </button>
                             </div>
 
-                            <div class="upload-media-attachment">
+                            <div class="upload-media-attachment" v-if="story.default_image.length > 0">
                                 <div class="attachment-preview">
                                     <div class="thumbnail">
                                         <div class="centered">
-                                            <img src="/images/gallery-02.jpg" draggable="false" alt="">
+                                            <img v-attr="src: story.default_image" draggable="false" alt="">
                                         </div>
                                     </div>
                                 </div>

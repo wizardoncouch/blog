@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Story;
 use Illuminate\Http\Request;
 
 class StoryController extends Controller
@@ -63,15 +64,17 @@ class StoryController extends Controller
             foreach ($image_tags as $img) {
                 $images[] = $img->getAttribute('src');
             }
-
             if (empty($story->default_image) && count($images) > 0) {
                 $story->default_image = $images[0];
             }
             if (filter_var($story->default_image, FILTER_VALIDATE_URL) === false) {
                 $story->default_image = '/' . $story->default_image;
             }
-
             $story->images = $images;
+
+            //readable dates
+            $story->created = date('F j, Y', strtotime($story->created_at));
+            $story->uri_title = urlencode($story->title);
         });
 
         return $this->xhr($stories, true);
@@ -107,7 +110,29 @@ class StoryController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $response = Story::find($id);
+            $response->author = $response->user->first_name . ' ' . $response->user->last_name;
+            if (!is_null($response->deleted_at)) {
+                $status = 'trash';
+            } elseif ($response->published) {
+                $status = 'published';
+            } else {
+                $status = 'draft';
+            }
+            $response->status = $status;
+            $response->created = date('F j, Y', strtotime($response->created_at));
+            $code = 200;
+            if (!$response) {
+                $response = 'Story id ' . $id . ' does not exist.';
+                $code = 404;
+            }
+        } catch (PDOException $e) {
+            $response = $e->getMessage();
+            $code = 500;
+        }
+
+        return $this->xhr($response, $code);
     }
 
     /**

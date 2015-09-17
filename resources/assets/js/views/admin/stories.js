@@ -8,19 +8,15 @@ module.exports = {
             stories: []
         }
     },
-    ready: function () {
-        this.getStories();
-    },
-    methods: {
-        getStories: function () {
-            var self = this;
-            $.ajax({
-                url: '/api/1.0/stories',
-                method: 'GET'
-            }).done(function (result) {
-                //self.stories = result.data.items;
-            });
-        }
+    compiled: function () {
+        var self = this;
+        $.ajax({
+            url: '/api/1.0/stories',
+            method: 'GET'
+        }).done(function (result) {
+            self.stories = result.data;
+        });
+
     }
 };
 

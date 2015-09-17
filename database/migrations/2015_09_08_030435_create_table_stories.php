@@ -23,6 +23,7 @@ class CreateTableStories extends Migration
             $table->json('keywords')->nullable();
             $table->string('default_image')->nullable();
             $table->boolean('published');
+            $table->boolean('featured');
             $table->timestamps();
 
             $table->foreign('user_id')

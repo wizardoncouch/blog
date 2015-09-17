@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableCategories extends Migration
+class CreateTableProjects extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,18 @@ class CreateTableCategories extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->engine = 'InnoDB';
+
             $table->increments('id');
-            $table->unsignedInteger('user_id')->index();
+            $table->integer('user_id')->unsigned()->index();
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->boolean('show')->default(true);
+            $table->string('description');
+            $table->enum('permission', ['all', 'followers', 'me'])->default('all');
             $table->timestamps();
 
-            $table->foreign('user_id')
-                ->references('id')->on('users')
-                ->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 
@@ -34,6 +34,6 @@ class CreateTableCategories extends Migration
      */
     public function down()
     {
-        Schema::drop('categories');
+        Schema::drop('projects');
     }
 }

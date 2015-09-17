@@ -63,30 +63,36 @@
                     <a v-link="{ name: 'dashboard' }"><i class="fa fa-fw fa-tachometer"></i> <span>Dashboard</span></a>
                 </li>
                 <li class="has-submenu" v-class="active: $route.path.indexOf('/stor') > -1">
-                    <a v-link="{ name: 'storyList' }"><i class="fa fa-fw fa-pencil"></i> <span>Stories</span></a>
+                    <a v-link="{ name: 'storyList' }"><i class="fa fa-fw fa-book"></i> <span>Stories</span></a>
 
                     <ul class="sub-menu">
                         <li v-class="active: $route.path == '/stories'"><a
-                                v-link="{ name: 'storyList' }"><i class="fa fa-fw fa-pencil visible-xs"></i> <span class="hidden-xs">All Stories</span></a></li>
-                        <li v-class="active: $route.path == '/story/tags'"><a v-link="{ name: 'storyTags' }">Tags</a>
+                                v-link="{ name: 'storyList' }"><i class="fa fa-fw fa-pencil"></i> <span
+                                class="hidden-xs">All Stories</span></a></li>
+                        <li v-class="active: $route.path == '/story/tags'"><a v-link="{ name: 'storyTags' }"><i
+                                class="fa fa-fw fa-tags"></i> <span class="hidden-xs">Keywords</span></a>
                         </li>
                     </ul>
                 </li>
                 <li v-class="active: $route.path == '/categories'">
-                    <a v-link="{ name: 'categories' }"><i class="fa fa-fw fa-filter"></i> <span>Categories</span></a>
+                    <a v-link="{ name: 'categories' }"><i class="fa fa-fw fa-share-alt"></i> <span>Categories</span></a>
                 </li>
                 <li class="has-submenu" v-class="active: $route.path.indexOf('/translator') > -1">
-                    <a v-link="{ name: 'translations' }"><i class="fa fa-fw fa-pencil"></i> <span>Translator</span></a>
+                    <a v-link="{ name: 'translations' }"><i class="fa fa-fw fa-sort-alpha-asc"></i>
+                        <span>Translator</span></a>
 
                     <ul class="sub-menu">
                         <li v-class="active: $route.path == '/translator/translations'"><a
-                                v-link="{ name: 'translations' }">Translations</a></li>
-                        <li v-class="active: $route.path == '/translator/languages'"><a v-link="{ name: 'languages' }">Languages</a>
+                                v-link="{ name: 'translations' }"><i class="fa fa-fw fa-random"></i> <span
+                                class="hidden-xs">Translations</span></a></li>
+                        <li v-class="active: $route.path == '/translator/languages'"><a
+                                v-link="{ name: 'languages' }"><i class="fa fa-fw fa-globe"></i> <span
+                                class="hidden-xs">Languages</span></a>
                         </li>
                     </ul>
                 </li>
                 <li v-class="active: $route.path == '/users'">
-                    <a v-link="{ name: 'users' }"><i class="fa fa-fw fa-filter"></i> <span>Users</span></a>
+                    <a v-link="{ name: 'users' }"><i class="fa fa-fw fa-users"></i> <span>Users</span></a>
                 </li>
             </ul>
         </div>
