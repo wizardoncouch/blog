@@ -18,7 +18,8 @@ var paths = {
     'bootstrap': './vendor/bower_components/bootstrap-sass/assets/',
     'fontawesome': './vendor/bower_components/font-awesome/',
     'cookies': './vendor/bower_components/cookies-js/',
-    'bourbon': './vendor/bower_components/bourbon/app/assets/'
+    'bourbon': './vendor/bower_components/bourbon/app/assets/',
+    'dropzone': './vendor/bower_components/dropzone/'
 }
 elixir(function (mix) {
     mix.sass("*.*", 'public/css/app.css', {includePaths: [paths.bootstrap + 'stylesheets', paths.fontawesome + 'scss', paths.bourbon + 'stylesheets']});
@@ -32,6 +33,7 @@ elixir(function (mix) {
         paths.cookies + "dist/cookies.js",
         paths.vue + "dist/vue.js",
         paths.router + "dist/vue-router.js",
+        paths.dropzone + "dist/dropzone.js",
         "resources/assets/js/vendor/ie10-viewport-bug-workaround.js",
         "resources/assets/js/vendor/scrollbar.min.js",
         "resources/assets/js/vendor/modernizr.min.js",

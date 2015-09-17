@@ -17,6 +17,11 @@ module.exports = {
             self.stories = result.data;
         });
 
+    },
+    methods:{
+        ucword: function (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
     }
 };
 

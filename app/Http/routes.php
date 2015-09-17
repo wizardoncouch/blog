@@ -80,6 +80,24 @@ Route::group(['prefix' => 'api/1.0'], function () {
             'uses'       => 'KeywordController@destroy'
         ]);
     });
+
+    Route::get('files', 'FileController@index');
+    Route::group(['prefix' => 'file'], function () {
+        Route::get('{id}', 'FileController@show');
+        Route::post('create', [
+            'middleware' => 'auth.token',
+            'uses'       => 'FileController@store'
+        ]);
+        Route::post('update', [
+            'middleware' => 'auth.token',
+            'uses'       => 'FileController@store'
+        ]);
+        Route::post('delete', [
+            'middleware' => 'auth.token',
+            'uses'       => 'FileController@destroy'
+        ]);
+    });
+
 });
 
 /***** frontend routes *****/

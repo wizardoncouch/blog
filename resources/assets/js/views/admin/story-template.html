@@ -67,12 +67,12 @@
                         <div class="panel-body">
                             <ul class="list-menu">
                                 <li>
-                                    <i class="fa fa-fw fa-pencil"></i> Status:
+                                    <i class="fa fa-fw fa-info-circle"></i> Status:
                                     <span class="label" v-if="story.status.length > 0"
                                           v-class=" label-warning: story.status == 'draft' || story.status == 'new',
                                                     label-primary: story.status == 'published',
                                                     label-danger: story.status == 'trashed'">
-                                        <strong>{{ ucwords(story.status) }}</strong>
+                                        <strong>{{ ucword(story.status) }}</strong>
                                     </span> &nbsp;
                                     <span v-if="story.featured == 1"
                                           class="label label-success"><strong>Featured</strong></span>
@@ -159,15 +159,14 @@
 
                 <div class="panel panel-default">
                     <button class="btn btn-sm btn-primary pull-left">Save</button>
-                    <button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"
-                            alt="Move to Trash">
-                        Move to Trash
+                    <!--<button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"-->
+                    <!--alt="Move to Trash">-->
+                    <!--Move to Trash-->
+                    <!--</button>-->
+                    <button class="btn btn-sm btn-link pull-right overlay-danger">
+                        <i class="fa fa-trash fa-2x"></i>
                     </button>
-                    <button class="btn btn-sm btn-link pull-right overlay-danger"
-                            v-if="story.published == 0 && story.id > 0"
-                            alt="Delete Permanently">
-                        Delete
-                    </button>
+
                 </div>
                 <!--/ .panel -->
 
@@ -189,7 +188,9 @@
             </div>
             <div class="modal-body">
                 <div class="row full-height">
-                    <div class="col-sm-8 col-md-9 col-lg-10 full-height">
+                    <div class="col-sm-8 col-md-9 col-lg-10 full-height dz" id="upload-file-zone">
+                        <div id="upload-file-preview">
+                        </div>
                         <ul class="menu scrollable clearfix">
                             <li class="attachment" role="checkbox">
                                 <div class="attachment-preview">
@@ -268,7 +269,7 @@
             <!--/ .modal-body -->
             <div class="modal-footer">
                 <div class="pull-sm-left">
-                    <button type="button" class="btn btn-primary">Upload Image</button>
+                    <button type="button" class="btn btn-primary" id="upload-file-btn">Upload Image</button>
                 </div>
                 <div class="pull-sm-right">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

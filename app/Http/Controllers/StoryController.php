@@ -72,9 +72,21 @@ class StoryController extends Controller
             }
             $story->images = $images;
 
+            //author name
+            $story->author = $story->user->first_name . ' ' . $story->user->last_name;
             //readable dates
             $story->created = date('F j, Y', strtotime($story->created_at));
+            //url encoded title
             $story->uri_title = urlencode($story->title);
+
+            //readable status
+            if (!is_null($story->deleted_at)) {
+                $story->status = 'trash';
+            } elseif ($story->published) {
+                $story->status = 'published';
+            } else {
+                $story->status = 'draft';
+            }
         });
 
         return $this->xhr($stories, true);

@@ -25,6 +25,7 @@ module.exports = {
                 created: 'Now',
                 status: ''
             },
+            uploadFileZone: null
         }
     },
     compiled: function () {
@@ -40,9 +41,20 @@ module.exports = {
             this.getCategories();
             this.getKeywords();
         }
+        this.uploadFileZone = new Dropzone('div#upload-file-zone', {
+            method: 'POST',
+            acceptedFiles: 'image/*',
+            autoProcessQueue: true,
+            uploadMultiple: true,
+            parallelUploads: 50,
+            url: "api/1.0/file/create",
+            clickable: "#upload-file-btn",
+            previewsContainer: '#upload-file-preview',
+            maxFilesize: 1024
+        });
     },
     methods: {
-        ucwords: function (string) {
+        ucword: function (string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         },
         getStory: function (id) {

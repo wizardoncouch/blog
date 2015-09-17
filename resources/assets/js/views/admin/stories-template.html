@@ -12,19 +12,13 @@
 </ul>
 
 <div class="form-inline">
-    <div class="form-group">
-        <input class="form-control" placeholder="Search"/>
-    </div>
+    <input class="form-control" placeholder="Search"/>
 
-    <div class="form-group">
-        <select class="form-control">
-            <option>All Dates</option>
-            <option>August 2015</option>
-            <option>July 2015</option>
-        </select>
-
-        <button class="btn btn-complete">Filter</button>
-    </div>
+    <select class="form-control">
+        <option>All Dates</option>
+        <option>August 2015</option>
+        <option>July 2015</option>
+    </select>
 </div>
 
 <div class="form-group">
@@ -32,39 +26,66 @@
         <thead>
         <tr>
             <th data-sortable="true">Title</th>
+            <th data-sortable="true" class="hidden-xs">Author</th>
             <th data-sortable="true" class="hidden-xs">Date</th>
         </tr>
         </thead>
         <tbody>
         <tr v-repeat="row: stories">
             <td class="post-title" data-value="Wedding of the Day">
-                <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="title">{{row.title}}</a>
+                <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="title">
+                    {{row.title}} <i class="fa fa-star overlay-warning" title="Featured"></i>
+                </a>
 
                 <div class="row-actions">
                     <ul class="list-inline">
                         <li>
-                            <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="overlay-success"><i class="fa fa-pencil"></i></a>
+                            <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="overlay-success"><i
+                                    class="fa fa-pencil"></i></a>
                         </li>
                         <li>
-                            <a href="/story/{{ row.id }}/{{ row.uri_title }}" class="overlay-link"><i class="fa fa-eye"></i></a>
+                            <a href="/story/{{ row.id }}/{{ row.uri_title }}" class="overlay-link"><i
+                                    class="fa fa-eye"></i></a>
                         </li>
-                        <li v-if="row.featured == 0 && row.deleted_at == null">
-                            <a href="" class="overlay-success"><i class="fa fa-star"></i></a>
+                        <li v-if="row.status != 'trashed'">
+                            <a href="javascript:void(0)" class="overlay-danger"><i class="fa fa-trash"
+                                                                                   title="Delete entry"></i></a>
                         </li>
-                        <li v-if="row.deleted_at == null">
-                            <a href="" class="overlay-danger"><i class="fa fa-trash"></i></a>
+                    </ul>
+                    <ul class="visible-xs">
+                        <li>
+                            <i class="fa fa-fw fa-info-circle"></i> Status:
+                                    <span class="label" v-if="row.status.length > 0"
+                                          v-class=" label-warning: row.status == 'draft' || row.status == 'new',
+                                                    label-primary: row.status == 'published',
+                                                    label-danger: row.status == 'trashed'">
+                                        <strong>{{ ucword(row.status) }}</strong>
+                                    </span> &nbsp;
+                                    <span v-if="row.featured == 1"
+                                          class="label label-success"><strong>Featured</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa fa-fw fa-user"></i> Author: <a href="javascript:void(0);"><strong>{{ row.author }}</strong></a>
+                        </li>
+                        <li>
+                            <i class="fa fa-fw fa-calendar"></i> Created at: <strong>{{ row.created}}</strong>
                         </li>
                     </ul>
                 </div>
             </td>
+            <td class="post-date hidden-xs" data-value="{{row.author}}">
+                <a href="javascript:void(0);">{{row.author}}</a>
+            </td>
             <td class="post-date hidden-xs" data-value="{{row.created_at}}">
-                <span title="2015/07/02 8:46:55 am" style="display:block;margin-bottom:5px;">{{row.created}}</span>
+                <div style="display:block;margin-bottom:5px;">{{row.created}}</div>
 
                 <div>
-                    <span v-if="row.status == 'published' || row.status == 'draft'" class="label"
-                          v-class="label-warning: row.status == 'draft', label-primary: row.status == 'published'">{{row.status.charAt(0).toUpperCase() + row.status.slice(1)}}</span>
-                    <span v-if="row.featured == 1 && row.deleted_at == null" class="label label-success">Featured</span>
-                    <span v-if="row.deleted_at != null" class="label label-danger">Deleted</span>
+                    <span class="label" v-if="row.status.length > 0"
+                          v-class="label-warning: row.status == 'draft' || row.status == 'new',
+                          label-primary: row.status == 'published',
+                          label-danger: row.status == 'trashed'">
+                        <strong>{{ ucword(row.status) }}</strong>
+                    </span>
                 </div>
             </td>
         </tr>
