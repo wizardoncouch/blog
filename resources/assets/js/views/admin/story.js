@@ -10,6 +10,7 @@ module.exports = {
             tinymce_container: 'post-content',
             categories: [],
             keywords: [],
+            files: [],
             story: {
                 id: 0,
                 category_id: 0,
@@ -32,26 +33,43 @@ module.exports = {
         tinyMCE.execCommand('mceRemoveEditor', true, this.tinymce_container);
     },
     ready: function () {
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var self = this;
         tinyMCE.settings = tinymceConfig.default;
-        tinyMCE.execCommand('mceAddEditor', true, this.tinymce_container);
-        if (this.$route.params.id > 0) {
-            this.getStory(this.$route.params.id);
+        tinyMCE.execCommand('mceAddEditor', true, self.tinymce_container);
+        if (self.$route.params.id > 0) {
+            self.getStory(self.$route.params.id);
         } else {
-            this.story.status = 'new';
-            this.getCategories();
-            this.getKeywords();
+            self.story.status = 'new';
+            self.getCategories();
+            self.getKeywords();
         }
-        this.uploadFileZone = new Dropzone('div#upload-file-zone', {
+        self.uploadFileZone = new Dropzone('div#upload-file-zone', {
+            paramName: "file",
             method: 'POST',
             acceptedFiles: 'image/*',
             autoProcessQueue: true,
-            uploadMultiple: true,
-            parallelUploads: 50,
-            url: "api/1.0/file/create",
+            uploadMultiple: false,
+            url: "/api/1.0/file/create",
             clickable: "#upload-file-btn",
             previewsContainer: '#upload-file-preview',
-            maxFilesize: 1024
+            maxFilesize: 1024,
+            headers: {
+                Authorization: Cookies.get('AdminAuth')
+            },
+            params: {
+                _token: token,
+                id: 0,
+                type: 'story'
+            }
         });
+        self.uploadFileZone.on("complete", function (file) {
+            console.log(file.xhr);
+            //self.uploadFileZone.removeFile(file);
+            /* Maybe display some more file information on your page */
+        });
+
+        self.getFiles();
     },
     methods: {
         ucword: function (string) {
@@ -103,6 +121,12 @@ module.exports = {
         },
         getFiles: function () {
             var self = this;
+            $.ajax({
+                url: '/api/1.0/files',
+                method: 'GET'
+            }).done(function (result) {
+                self.files = result.data;
+            });
         }
     }
 };

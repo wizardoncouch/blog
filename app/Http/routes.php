@@ -34,15 +34,15 @@ Route::group(['prefix' => 'api/1.0'], function () {
     Route::group(['prefix' => 'story'], function () {
         Route::get('{id}', 'StoryController@show');
         Route::post('create', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'StoryController@store'
         ]);
         Route::post('update', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'StoryController@store'
         ]);
         Route::post('delete', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'StoryController@destroy'
         ]);
     });
@@ -51,15 +51,15 @@ Route::group(['prefix' => 'api/1.0'], function () {
     Route::group(['prefix' => 'category'], function () {
         Route::get('{id}', 'CategoryController@show');
         Route::post('create', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'CategoryController@store'
         ]);
         Route::post('update', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'CategoryController@store'
         ]);
         Route::post('delete', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'CategoryController@destroy'
         ]);
     });
@@ -68,15 +68,15 @@ Route::group(['prefix' => 'api/1.0'], function () {
     Route::group(['prefix' => 'keyword'], function () {
         Route::get('{id}', 'KeywordController@show');
         Route::post('create', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'KeywordController@store'
         ]);
         Route::post('update', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'KeywordController@store'
         ]);
         Route::post('delete', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'KeywordController@destroy'
         ]);
     });
@@ -85,15 +85,15 @@ Route::group(['prefix' => 'api/1.0'], function () {
     Route::group(['prefix' => 'file'], function () {
         Route::get('{id}', 'FileController@show');
         Route::post('create', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'FileController@store'
         ]);
         Route::post('update', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'FileController@store'
         ]);
         Route::post('delete', [
-            'middleware' => 'auth.token',
+            'middleware' => 'jwt.auth',
             'uses'       => 'FileController@destroy'
         ]);
     });
@@ -109,7 +109,7 @@ Route::get('/@{user}/{subs?}', function () {
     return View::make('user');
 })->where(['subs' => '.*']);
 
-Route::get('/{subs?}', function () {
-//    return View::make('default');
-})->where(['subs' => '.*']);
+//Route::get('/{subs?}', function () {
+////    return View::make('default');
+//})->where(['subs' => '.*']);
 

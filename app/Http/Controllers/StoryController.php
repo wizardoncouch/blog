@@ -15,81 +15,86 @@ class StoryController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->get('limit') ?: $this->app_list_limit;
-        $filter = null;
-        if ($request->has('filter')) {
-            $filter = $request->get('filter');
-        }
-        switch ($filter) {
-            case 'featured':
-                $stories = Story::with('user')->whereFeatured(1);
-                break;
-            case 'popular':
-                $stories = Story::with('user')->orderBy(\DB::raw('rand()'));
-                break;
-            case 'recent':
-                $stories = Story::with('user')->orderBy('created_at', 'desc');
-                break;
-            default:
+        try {
+
+            $limit = $request->get('limit') ?: $this->app_list_limit;
+            $filter = null;
+            if ($request->has('filter')) {
+                $filter = $request->get('filter');
+            }
+            switch ($filter) {
+                case 'featured':
+                    $stories = Story::with('user')->whereFeatured(1);
+                    break;
+                case 'popular':
+                    $stories = Story::with('user')->orderBy(\DB::raw('rand()'));
+                    break;
+                case 'recent':
+                    $stories = Story::with('user')->orderBy('created_at', 'desc');
+                    break;
+                default:
+                    $stories = Story::with('user');
+            }
+
+            if (!$stories) {
                 $stories = Story::with('user');
-        }
+            }
+            $stories = $stories->paginate($limit);
 
-        if (!$stories) {
-            $stories = Story::with('user');
-        }
-        $stories = $stories->paginate($limit);
-
-        $stories->each(function ($story) {
-            if (empty($story->excerpt)) {
-                //extract the body..
-                $text = trim(strip_tags($story->content));
-                if (mb_strlen($text) != strlen($text)) {
-                    if (mb_strlen($text) > 100) {
-                        $text = mb_substr($text, 0, 100) . ' ...';
+            $stories->each(function ($story) {
+                if (empty($story->excerpt)) {
+                    //extract the body..
+                    $text = trim(strip_tags($story->content));
+                    if (mb_strlen($text) != strlen($text)) {
+                        if (mb_strlen($text) > 100) {
+                            $text = mb_substr($text, 0, 100) . ' ...';
+                        }
+                    } else {
+                        if (strlen($text) > 200) {
+                            $text = substr($text, 0, 200) . ' ...';
+                        }
                     }
-                } else {
-                    if (strlen($text) > 200) {
-                        $text = substr($text, 0, 200) . ' ...';
-                    }
+                    $story->excerpt = $text;
                 }
-                $story->excerpt = $text;
-            }
 
-            //extract images
-            $dom = new \domDocument;
-            $dom->loadHTML($story->content);
-            $dom->preserveWhiteSpace = false;
-            $image_tags = $dom->getElementsByTagName('img');
-            $images = [];
-            foreach ($image_tags as $img) {
-                $images[] = $img->getAttribute('src');
-            }
-            if (empty($story->default_image) && count($images) > 0) {
-                $story->default_image = $images[0];
-            }
-            if (filter_var($story->default_image, FILTER_VALIDATE_URL) === false) {
-                $story->default_image = '/' . $story->default_image;
-            }
-            $story->images = $images;
+                //extract images
+                $dom = new \domDocument;
+                $dom->loadHTML($story->content);
+                $dom->preserveWhiteSpace = false;
+                $image_tags = $dom->getElementsByTagName('img');
+                $images = [];
+                foreach ($image_tags as $img) {
+                    $images[] = $img->getAttribute('src');
+                }
+                if (empty($story->default_image) && count($images) > 0) {
+                    $story->default_image = $images[0];
+                }
+                if (filter_var($story->default_image, FILTER_VALIDATE_URL) === false) {
+                    $story->default_image = '/' . $story->default_image;
+                }
+                $story->images = $images;
 
-            //author name
-            $story->author = $story->user->first_name . ' ' . $story->user->last_name;
-            //readable dates
-            $story->created = date('F j, Y', strtotime($story->created_at));
-            //url encoded title
-            $story->uri_title = urlencode($story->title);
+                //author name
+                $story->author = $story->user->first_name . ' ' . $story->user->last_name;
+                //readable dates
+                $story->created = date('F j, Y', strtotime($story->created_at));
+                //url encoded title
+                $story->uri_title = urlencode($story->title);
 
-            //readable status
-            if (!is_null($story->deleted_at)) {
-                $story->status = 'trash';
-            } elseif ($story->published) {
-                $story->status = 'published';
-            } else {
-                $story->status = 'draft';
-            }
-        });
+                //readable status
+                if (!is_null($story->deleted_at)) {
+                    $story->status = 'trash';
+                } elseif ($story->published) {
+                    $story->status = 'published';
+                } else {
+                    $story->status = 'draft';
+                }
+            });
 
-        return $this->xhr($stories, true);
+            return $this->xhr($stories, true);
+        } catch (\Exception $e) {
+            return $this->xhr($e->getMessage(), 500);
+        }
 
     }
 
@@ -139,12 +144,12 @@ class StoryController extends Controller
                 $response = 'Story id ' . $id . ' does not exist.';
                 $code = 404;
             }
+
+            return $this->xhr($response, $code);
         } catch (PDOException $e) {
-            $response = $e->getMessage();
-            $code = 500;
+            return $this->xhr($e->getMessage(), 500);
         }
 
-        return $this->xhr($response, $code);
     }
 
     /**

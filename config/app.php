@@ -136,6 +136,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
 
     ],
     /*
@@ -186,6 +188,8 @@ return [
         'View'       => Illuminate\Support\Facades\View::class,
         'JWTAuth'    => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Image'      => Intervention\Image\Facades\Image::class,
+
     ],
 
 ];

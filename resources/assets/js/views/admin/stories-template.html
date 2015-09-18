@@ -34,13 +34,13 @@
         <tr v-repeat="row: stories">
             <td class="post-title" data-value="Wedding of the Day">
                 <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="title">
-                    {{row.title}} <i class="fa fa-star overlay-warning" title="Featured"></i>
+                    {{row.title}} <i class="fa fa-star overlay-success" title="Featured"></i>
                 </a>
 
                 <div class="row-actions">
                     <ul class="list-inline">
                         <li>
-                            <a v-link="{ name: 'storyEdit', params: { id: row.id } }" class="overlay-success"><i
+                            <a v-link="{ name: 'storyEdit', params: { id: row.id } }"><i
                                     class="fa fa-pencil"></i></a>
                         </li>
                         <li>
@@ -60,9 +60,7 @@
                                                     label-primary: row.status == 'published',
                                                     label-danger: row.status == 'trashed'">
                                         <strong>{{ ucword(row.status) }}</strong>
-                                    </span> &nbsp;
-                                    <span v-if="row.featured == 1"
-                                          class="label label-success"><strong>Featured</strong></span>
+                                    </span>
                         </li>
                         <li>
                             <i class="fa fa-fw fa-user"></i> Author: <a href="javascript:void(0);"><strong>{{ row.author }}</strong></a>

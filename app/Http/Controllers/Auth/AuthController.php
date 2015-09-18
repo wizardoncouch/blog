@@ -41,7 +41,7 @@ class AuthController extends Controller
             $claims = ['company' => 'NST'];
             if ($request->has('remember')) {
                 if ($request->get('remember') == true) {
-                    $claims['exp'] = "" . strtotime("+1 year");
+                    $claims['exp'] = strtotime("+1 year");
                 }
             }
             // Attempt to verify the credentials and create a token for the user.
