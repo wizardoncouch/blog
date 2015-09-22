@@ -64,6 +64,7 @@ class FileController extends Controller
                     $exp = explode('.', $file->filename);
                     array_pop($exp);
                     $file->thumb = implode('.', $exp) . '-thumb.jpg';
+                    $file->data = json_decode($file->data);
                 });
                 $response = $files;
             } else {
@@ -99,11 +100,10 @@ class FileController extends Controller
         //
         try {
             $thumb = false;
-            $response = [];
             $type = $request->get('type');
             $f = $request->file('file');
             $id = $request->get('id');
-            $directory = 'uploads/projects';
+            $directory = DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'projects';
             switch ($type) {
                 case 'story':
                     $project = Project::whereName('Story')->first();
@@ -120,55 +120,70 @@ class FileController extends Controller
                     $user = User::find($id);
                     break;
             }
+            $save_to_db = false;
             if (in_array($type, ['avatar', 'cover'])) {
                 $filename = $type . '-' . $user->id . '.' . $f->getClientOriginalExtension();
-                $file = new \stdClass();
-                $file->filename = $filename;
             } else {
+                $save_to_db = true;
                 $thumb = true;
                 $directory = $directory . DIRECTORY_SEPARATOR . $project->id;
                 $basename = md5(mt_rand());
                 $filename = $basename . '.' . $f->getClientOriginalExtension();
-                $file = new File();
-                $file->user_id = $this->logged_user->id;
-                $file->project_id = $project->id;
-                if ($type == 'project') {
-                    $file->category_id = $request->get('category_id');
-                    $file->website = $request->get('website');
-                    $file->keywords = $request->get('keywords');
-                    $file->description = $request->get('description');
-                } else {
-                    $category = Category::whereName('Other')->first();
-                    $file->category_id = $category->id;
-                }
-                $file->title = $project->name;
-
-                $file->filename = $directory . DIRECTORY_SEPARATOR . $filename;
-
-                $file->save();
             }
-            Storage::put(
-                $directory . DIRECTORY_SEPARATOR . $filename,
-                file_get_contents($f->getRealPath())
-            );
+            //save image
+            $image = Image::make($f->getRealPath())->encode('jpg');
+            if (Storage::put($directory . DIRECTORY_SEPARATOR . $filename, $image->__toString())) {
+
+                if ($save_to_db) {
+                    $image_height = $image->height();
+                    $image_width = $image->width();
+
+                    $file = new File();
+                    $file->user_id = $this->logged_user->id;
+                    $file->project_id = $project->id;
+                    if ($type == 'project') {
+                        $file->category_id = $request->get('category_id');
+                        $file->website = $request->get('website');
+                        $file->keywords = $request->get('keywords');
+                        $file->description = $request->get('description');
+                    } else {
+                        $category = Category::whereName('Other')->first();
+                        $file->category_id = $category->id;
+                    }
+                    $file->title = $project->name;
+
+                    $file->filename = $directory . DIRECTORY_SEPARATOR . $filename;
+                    $file->data = json_encode(
+                        [
+                            'width'  => $image_width,
+                            'height' => $image_height
+                        ]
+                    );
+
+                    $file->save();
+                } else {
+                    $file = new \stdClass();
+                    $file->filename = $filename;
+                }
+
+            }
+
+            //create thumbnail
             if ($thumb) {
-                $img_source = $f->getRealPath();
-                $image = Image::make($img_source);
-                $image_height = $image->height();
-                $image_width = $image->width();
+                $thumb = Image::make($f->getRealPath());
                 $attr = ($image_width > $image_height) ? $image_height : $image_width;
-                $image->crop($attr, $attr);
+                $thumb->crop($attr, $attr);
                 if ($image_width > $image_height) {
-                    $image->resize(null, 300, function ($constraint) {
+                    $thumb->resize(null, 300, function ($constraint) {
                         $constraint->aspectRatio();
                     });
                 } else {
-                    $image->resize(300, null, function ($constraint) {
+                    $thumb->resize(300, null, function ($constraint) {
                         $constraint->aspectRatio();
                     });
                 }
-                $image->encode('jpg');
-                if (Storage::put($directory . DIRECTORY_SEPARATOR . $basename . '-thumb.jpg', $image->__toString())) {
+                $thumb->encode('jpg');
+                if (Storage::put($directory . DIRECTORY_SEPARATOR . $basename . '-thumb.jpg', $thumb->__toString())) {
                     $file->thumb = $directory . DIRECTORY_SEPARATOR . $basename . '-thumb.jpg';
                 }
             }

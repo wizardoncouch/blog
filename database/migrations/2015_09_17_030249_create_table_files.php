@@ -21,6 +21,7 @@ class CreateTableFiles extends Migration
             $table->integer('category_id')->unsigned()->index();
             $table->string('title');
             $table->string('filename');
+            $table->json('data')->nullable();
             $table->string('website')->nullable();
             $table->text('keywords')->nullable();
             $table->text('description')->nullable();

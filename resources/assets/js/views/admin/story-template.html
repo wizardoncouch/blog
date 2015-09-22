@@ -5,13 +5,18 @@
             <a v-link="{ name : 'storyList' }" class="cancel-btn">Cancel</a>
         </h2>
 
+        <div class="alert alert-danger" role="alert" v-if="hasError">
+            <div v-repeat="row: errors.values"><i class="fa fa-times"></i> &nbsp; {{ row }}</div>
+        </div>
+
         <div class="form-group mg-20-b">
             <input type="text" name="title" id="post-title" class="form-control input-lg" placeholder="Enter Title Here"
                    v-model="story.title"/>
         </div>
 
         <div class="form-group">
-            <button class="btn btn-sm" data-toggle="modal" data-target="#modal-media"><i class="fa fa-photo"></i> Add
+            <button class="btn btn-sm" data-toggle="modal" data-target="#modal-media" v-on="click:getFiles"><i
+                    class="fa fa-photo"></i> Add
                 Media
             </button>
             <textarea id="post-content" class="form-control" rows="10" cols="10" v-model="story.content"></textarea>
@@ -158,7 +163,7 @@
                 <!--/ .panel -->
 
                 <div class="panel panel-default">
-                    <button class="btn btn-sm btn-primary pull-left">Save</button>
+                    <button class="btn btn-sm btn-primary pull-left" v-on="click: saveStory">Save</button>
                     <!--<button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"-->
                     <!--alt="Move to Trash">-->
                     <!--Move to Trash-->
@@ -192,68 +197,37 @@
                         <div id="upload-file-preview">
                         </div>
                         <ul class="menu scrollable clearfix">
-                            <li class="attachment" role="checkbox">
-                                <div class="attachment-preview">
+                            <li class="attachment" role="checkbox" v-repeat="row: files | orderBy id reverse"
+                                v-class="selected: selected.files.indexOf($index) > -1,
+                                         active: selected.active != null && selected.active == $index">
+                                <div class="attachment-preview" v-on="click: fileSelect($index)">
                                     <div class="thumbnail">
                                         <div class="centered">
-                                            <img src="./images/gallery-01.jpg" draggable="false" alt="">
+                                            <img v-attr="src: row.thumb" draggable="false" alt="">
                                         </div>
                                     </div>
                                 </div>
-                                <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                        class="icon"></i></a>
-                            </li>
-                            <li class="attachment selected" role="checkbox">
-                                <div class="attachment-preview">
-                                    <div class="thumbnail">
-                                        <div class="centered">
-                                            <img src="./images/gallery-02.jpg" draggable="false" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                        class="icon"></i></a>
-                            </li>
-                            <li class="attachment" role="checkbox">
-                                <div class="attachment-preview">
-                                    <div class="thumbnail">
-                                        <div class="centered">
-                                            <img src="./images/gallery-03.jpg" draggable="false" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                        class="icon"></i></a>
-                            </li>
-                            <li class="attachment" role="checkbox">
-                                <div class="attachment-preview">
-                                    <div class="thumbnail">
-                                        <div class="centered">
-                                            <img src="./images/gallery-04.jpg" draggable="false" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="check" role="button" title="Deselect" tabindex="0"><i
-                                        class="icon"></i></a>
+                                <a class="check" role="button" title="Deselect" tabindex="0"
+                                   v-on="click: fileDeselect($index)"><i class="icon"></i></a>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="col-sm-4 col-md-3 col-lg-2 full-height hidden-xs">
+                    <div class="col-sm-4 col-md-3 col-lg-2 full-height hidden-xs" v-if="selected.active != null">
                         <div class="attachment-details scrollable">
                             <h4>Media Details</h4>
 
                             <div class="form-group form-group-default">
                                 <label>Title</label>
-                                <input type="text" class="form-control" placeholder="Title goes here"/>
+                                <input type="text" class="form-control" placeholder="Title goes here" v-model="files[selected.active].title"/>
                             </div>
                             <div class="form-group form-group-default">
-                                <label>Height</label>
-                                <input type="text" class="form-control" placeholder="height in pixels"/>
+                                <label>Width <small>px</small></label>
+                                <input type="text" class="form-control" placeholder="width in pixels" v-model="files[selected.active].data.width"/>
                             </div>
                             <div class="form-group form-group-default">
-                                <label>Width</label>
-                                <input type="text" class="form-control" placeholder="width in pixels"/>
+                                <label>Height <small>px</small></label>
+                                <input type="text" class="form-control" placeholder="height in pixels" v-model="files[selected.active].data.height"/>
                             </div>
                             <div class="checkbox mg-20-b">
                                 <input type="checkbox" id="image-proportion"/>

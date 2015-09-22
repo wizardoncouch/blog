@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreStoryRequest;
 use App\Story;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StoryController extends Controller
@@ -111,12 +113,35 @@ class StoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param StoreStoryRequest $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreStoryRequest $request)
     {
         //
+        try {
+            if ($request->has('id')) {
+                $story = Story::find($request->get('id'));
+            } else {
+                $story = new Story();
+                $story->user_id = $this->logged_user->id;
+                $story->created_at = Carbon::now();
+            }
+            $story->category_id = $request->get('category_id');
+            $story->title = $request->get('title');
+            $story->content = $request->get('content');
+            $story->excerpt = $request->get('excerpt');
+            $story->keywords = $request->get('keywords');
+            $story->default_image = $request->get('default_image');
+            $story->published = $request->get('published');
+            $story->featured = $request->get('featured');
+            $story->updated_at = Carbon::now();
+            $story->save();
+
+            return $this->xhr($story);
+        } catch (\Exception $e) {
+            return $this->xhr($e->getMessage(), 500);
+        }
     }
 
     /**

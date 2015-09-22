@@ -100,6 +100,10 @@ Route::group(['prefix' => 'api/1.0'], function () {
 
 });
 
+Route::get('/uploads/{type}/{id}', 'ImageController@show');
+Route::get('/uploads/{type}/{id}/{filename}', 'ImageController@show');
+
+
 /***** frontend routes *****/
 Route::get('/admin/{subs?}', function () {
     return View::make('admin');

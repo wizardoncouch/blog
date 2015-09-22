@@ -11,6 +11,10 @@ module.exports = {
             categories: [],
             keywords: [],
             files: [],
+            selected: {
+                files: [],
+                active: null
+            },
             story: {
                 id: 0,
                 category_id: 0,
@@ -26,7 +30,12 @@ module.exports = {
                 created: 'Now',
                 status: ''
             },
-            uploadFileZone: null
+            uploadFileZone: null,
+            hasError: false,
+            errors: {
+                fields: [],
+                values: []
+            }
         }
     },
     compiled: function () {
@@ -49,11 +58,11 @@ module.exports = {
             method: 'POST',
             acceptedFiles: 'image/*',
             autoProcessQueue: true,
-            uploadMultiple: false,
+            uploadMultiple: true,
             url: "/api/1.0/file/create",
             clickable: "#upload-file-btn",
             previewsContainer: '#upload-file-preview',
-            maxFilesize: 1024,
+            maxFilesize: 20480,
             headers: {
                 Authorization: Cookies.get('AdminAuth')
             },
@@ -64,12 +73,14 @@ module.exports = {
             }
         });
         self.uploadFileZone.on("complete", function (file) {
-            console.log(file.xhr);
-            //self.uploadFileZone.removeFile(file);
-            /* Maybe display some more file information on your page */
+            console.log(file);
+            if (file.xhr.code == 200) {
+                self.uploadFileZone.removeFile(file);
+                self.files.push(file.xhr);
+                /* Maybe display some more file information on your page */
+            }
         });
 
-        self.getFiles();
     },
     methods: {
         ucword: function (string) {
@@ -127,6 +138,66 @@ module.exports = {
             }).done(function (result) {
                 self.files = result.data;
             });
+        },
+        fileSelect: function (index) {
+            //add selected
+            if (this.selected.files.indexOf(index) == -1) {
+                this.selected.files.push(index);
+            }
+            //add active
+            this.selected.active = index;
+        },
+        fileDeselect: function (index) {
+            //remove active
+            if (this.selected.active == index) {
+                this.selected.active = null;
+            }
+            //remove selected
+            var index = this.selected.files.indexOf(index);
+            if (index > -1) {
+                this.selected.files.splice(index, 1);
+            }
+        },
+        saveStory: function () {
+            this.validate();
+            if (this.hasError === false) {
+                var self = this;
+                var data = {
+                    title: self.story.title,
+                    content: self.story.content,
+                    category_id: self.story.category_id,
+                    excerpt: self.story.excerpt,
+                    keywords: JSON.stringify(self.story.keywords),
+                    default_image: self.story.default_image,
+                    published: self.story.published,
+                    featured: self.story.featured
+                };
+                var url = '/api/1.0/story/create';
+                if (self.story.id > 0) {
+                    data.id = self.story.id;
+                    url = '/api/1.0/story/update';
+                }
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: data,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", Cookies.get('AdminAuth'));
+                    }
+                }).done(function (result) {
+                    self.files = result.data;
+                });
+            }
+        },
+        validate: function () {
+            this.errors.fields = [];
+            this.errors.values = [];
+            this.hasError = false;
+            if (this.story.title.trim().length == 0) {
+                this.hasError = true;
+                this.errors.fields.push('title');
+                this.errors.values.push('Story title is required.');
+            }
         }
     }
 };
