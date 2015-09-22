@@ -89,6 +89,18 @@ var Users = Vue.extend({
     '</div>'
 });
 
+var Settings = Vue.extend({
+    //mixins: [StoryEditMixin]
+    template: '<div class="foo">' +
+    '<h2>This is Admin Settings!</h2>' +
+    '</div>'
+});
+
+var SettingsMixin = require('./views/admin/settings');
+var Settings = Vue.extend({
+    mixins: [SettingsMixin]
+});
+
 // Admin Router
 var router = new VueRouter({
     history: true,
@@ -160,6 +172,11 @@ router.map({
                 name: 'users',
                 component: Users,
                 auth: true
+            },
+            '/settings': {
+                name: 'adminSettings',
+                component: Settings,
+                auth: true
             }
         }
     },
@@ -171,9 +188,6 @@ router.map({
 router.beforeEach(function (transition) {
     var auth = Cookies.get('AdminAuth');
     var remember = localStorage.getItem('AdminRemember');
-    if (remember == 1) {
-        auth = localStorage.getItem('AdminAuth');
-    }
     if (transition.to.auth) {
         if (auth) {
             if (remember == 0) {
@@ -185,14 +199,9 @@ router.beforeEach(function (transition) {
                     }
                 }).done(function (data, text, xhr) {
                     var token = xhr.getResponseHeader('Authorization');
-                    if (remember == 1) {
-                        localStorage.setItem('AdminAuth', token);
-                    } else {
-                        Cookies.set('AdminAuth', token);
-                    }
+                    Cookies.set('AdminAuth', token);
                     transition.next();
                 }).fail(function () {
-                    localStorage.removeItem('AdminAuth');
                     localStorage.removeItem('AdminRemember');
                     localStorage.removeItem('AdminAvatar');
                     localStorage.removeItem('AdminName');
@@ -200,7 +209,6 @@ router.beforeEach(function (transition) {
                     transition.redirect('/login');
                 });
             } else {
-                Cookies.set('AdminAuth', auth);
                 transition.next();
             }
         } else {

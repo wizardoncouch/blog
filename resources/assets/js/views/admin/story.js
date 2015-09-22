@@ -2,6 +2,34 @@
  * Created by lexus on 9/16/15.
  */
 
+Vue.directive('chosen-story', {
+    twoWay: true, // note the two-way binding
+    bind: function () {
+        var self = this;
+        $(self.el)
+            .chosen({
+                inherit_select_classes: true,
+                width: '100%',
+                disable_search_threshold: 999
+            })
+            .change(function (ev) {
+                // two-way set
+                //quick fix because the this.set() doesn't work
+                switch (self.arg) {
+                    case 'category':
+                        self.vm.story.category_id = $(this).val();
+                        break;
+                    case 'keyword':
+                        self.vm.story.keywords = $(this).val();
+                        break;
+                }
+            });
+    },
+    update: function (nv, ov) {
+        // note that we have to notify chosen about update
+        $(this.el).trigger("chosen:updated");
+    }
+});
 
 module.exports = {
     template: require('./story-template.html'),
@@ -58,7 +86,7 @@ module.exports = {
             method: 'POST',
             acceptedFiles: 'image/*',
             autoProcessQueue: true,
-            uploadMultiple: true,
+            uploadMultiple: false,
             url: "/api/1.0/file/create",
             clickable: "#upload-file-btn",
             previewsContainer: '#upload-file-preview',
@@ -74,9 +102,10 @@ module.exports = {
         });
         self.uploadFileZone.on("complete", function (file) {
             console.log(file);
-            if (file.xhr.code == 200) {
+            var response = JSON.parse(file.xhr.response);
+            if (response.code == 200) {
                 self.uploadFileZone.removeFile(file);
-                self.files.push(file.xhr);
+                self.files.push(response.data);
                 /* Maybe display some more file information on your page */
             }
         });
@@ -132,6 +161,8 @@ module.exports = {
         },
         getFiles: function () {
             var self = this;
+            self.selected.files = [];
+            self.selected.active = null;
             $.ajax({
                 url: '/api/1.0/files',
                 method: 'GET'
@@ -158,23 +189,44 @@ module.exports = {
                 this.selected.files.splice(index, 1);
             }
         },
+        insertFiles: function () {
+            var text = '';
+            for (var i in this.selected.files) {
+                var index = this.selected.files[i];
+                var file = this.files[index];
+                text += '<span style="position:relative">';
+                text += '<img src="' + file.filename + '" width="' + file.width + '" height="' + file.height + '" />';
+                text += '</span>';
+            }
+            var editor = tinyMCE.get(this.tinymce_container);
+            editor.execCommand('mceInsertContent', false, text);
+            this.selected.files = [];
+            this.selected.active = null;
+            $('#modal-media').modal('toggle');
+            //tinyMCE.activeEditor.execCommand('mceInsertContent', false, "some text");
+        },
         saveStory: function () {
             this.validate();
             if (this.hasError === false) {
                 var self = this;
+                var editor = tinyMCE.get(self.tinymce_container);
+                if (editor !== null) {
+                    self.story.content = editor.getContent();
+                }
                 var data = {
                     title: self.story.title,
                     content: self.story.content,
-                    category_id: self.story.category_id,
+                    category_id: parseInt(self.story.category_id),
                     excerpt: self.story.excerpt,
                     keywords: JSON.stringify(self.story.keywords),
                     default_image: self.story.default_image,
                     published: self.story.published,
                     featured: self.story.featured
                 };
+
                 var url = '/api/1.0/story/create';
                 if (self.story.id > 0) {
-                    data.id = self.story.id;
+                    data.id = parseInt(self.story.id);
                     url = '/api/1.0/story/update';
                 }
                 $.ajax({
@@ -197,6 +249,11 @@ module.exports = {
                 this.hasError = true;
                 this.errors.fields.push('title');
                 this.errors.values.push('Story title is required.');
+            }
+            if (this.story.category_id == 0) {
+                this.hasError = true;
+                this.errors.fields.push('category');
+                this.errors.values.push('Category is required.');
             }
         }
     }

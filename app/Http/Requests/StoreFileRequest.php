@@ -27,7 +27,7 @@ class StoreFileRequest extends Request
             //
             'type' => 'required|in:project,story,book,avatar,cover',
             'id'   => 'required|integer',
-            'file' => 'required|image'
+            'file' => 'required'
         ];
     }
 

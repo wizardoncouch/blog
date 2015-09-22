@@ -19,11 +19,12 @@ var paths = {
     'fontawesome': './vendor/bower_components/font-awesome/',
     'cookies': './vendor/bower_components/cookies-js/',
     'bourbon': './vendor/bower_components/bourbon/app/assets/',
-    'dropzone': './vendor/bower_components/dropzone/'
+    'dropzone': './vendor/bower_components/dropzone/',
+    'cropper': './vendor/bower_components/cropper/'
 }
 elixir(function (mix) {
     mix.sass("*.*", 'public/css/app.css', {includePaths: [paths.bootstrap + 'stylesheets', paths.fontawesome + 'scss', paths.bourbon + 'stylesheets']});
-    mix.styles(['public/css/app.css', 'resources/assets/sass/vendor/scrollbar.min.css'], 'public/css/app.css', './');//.version('public/css/app.css');
+    mix.styles(['public/css/app.css', 'resources/assets/sass/vendor/scrollbar.min.css', paths.cropper + 'dist/cropper.css'], 'public/css/app.css', './');//.version('public/css/app.css');
     mix.copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts/bootstrap')
         .copy(paths.fontawesome + 'fonts/**', 'public/fonts/fontawesome')
         .copy('resources/assets/tinymce/**', 'public/tinymce');
@@ -34,6 +35,7 @@ elixir(function (mix) {
         paths.vue + "dist/vue.js",
         paths.router + "dist/vue-router.js",
         paths.dropzone + "dist/dropzone.js",
+        paths.cropper + "dist/cropper.js",
         "resources/assets/js/vendor/ie10-viewport-bug-workaround.js",
         "resources/assets/js/vendor/scrollbar.min.js",
         "resources/assets/js/vendor/modernizr.min.js",

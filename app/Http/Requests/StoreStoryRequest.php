@@ -25,13 +25,26 @@ class StoreStoryRequest extends Request
     {
         if (!$this->has('id')) {
             return [
-                'title' => 'required'
+                'title'       => 'required',
+                'category_id' => 'required|integer|exists:categories,id'
             ];
         }
 
         return [
-            'id'    => 'required|integer|exists:stories,id',
-            'title' => 'required'
+            'id'          => 'required|integer|exists:stories,id',
+            'category_id' => 'required|integer|exists:categories,id',
+            'title'       => 'required'
         ];
+    }
+
+    /**
+     * @param array $errors
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function response(array $errors)
+    {
+        $errors = array_merge(['code' => 422], $errors);
+
+        return response()->json($errors);
     }
 }

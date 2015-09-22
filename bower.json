@@ -26,6 +26,7 @@
     "bootstrap-sass": "bootstrap-sass-official#~3.3.5",
     "bourbon": "~4.2.4",
     "cookies-js": "~1.2.1",
+    "cropper": "~0.11.1",
     "dropzone": "~4.0.1",
     "font-awesome": "fontawesome#~4.4.0",
     "jquery": "~2.1.4",

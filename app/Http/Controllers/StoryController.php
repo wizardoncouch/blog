@@ -118,7 +118,6 @@ class StoryController extends Controller
      */
     public function store(StoreStoryRequest $request)
     {
-        //
         try {
             if ($request->has('id')) {
                 $story = Story::find($request->get('id'));

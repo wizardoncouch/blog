@@ -98,6 +98,23 @@ Route::group(['prefix' => 'api/1.0'], function () {
         ]);
     });
 
+    Route::get('users', 'UserController@index');
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('{id}', 'UserController@show');
+        Route::post('create', [
+            'middleware' => 'jwt.auth',
+            'uses'       => 'UserController@store'
+        ]);
+        Route::post('update', [
+            'middleware' => 'jwt.auth',
+            'uses'       => 'UserController@store'
+        ]);
+        Route::post('delete', [
+            'middleware' => 'jwt.auth',
+            'uses'       => 'UserController@destroy'
+        ]);
+    });
+
 });
 
 Route::get('/uploads/{type}/{id}', 'ImageController@show');

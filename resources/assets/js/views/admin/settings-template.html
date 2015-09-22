@@ -1,0 +1,174 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div class="vcard mg-20-b">
+            <a href="#" class="vcard-thumb">
+                <img src="assets/images/avatar-girl.png" width="95" height="95" class="img-circle" alt=""/>
+            </a>
+
+            <div class="vcard-content">
+                <a href="" class="vcard-link">Megan Simpsons</a>
+
+                <div class="vcard-meta">
+                    <span>Edit your name, avatar, etc.</span>
+                </div>
+            </div>
+        </div>
+        <!--/ .vcard -->
+
+
+        <div class="tablist">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#settings-profile" aria-controls="settings-profile"
+                                                          role="tab" data-toggle="tab">Profile</a></li>
+                <li role="presentation"><a href="#settings-password" aria-controls="settings-password" role="tab"
+                                           data-toggle="tab">Password</a></li>
+            </ul>
+            <!-- .nav-tabs -->
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active mg-20-y" id="settings-profile">
+
+                    <div class="row">
+
+                        <div class="col-md-3 col-md-offset-1 col-md-push-8">
+                            <div class="module settings-avatar mg-20-b">
+
+                                <div class="settings-avatar-wrap mg-20-b">
+                                    <img class="profile-avatar img-circle center-block" id="personal-avatar"
+                                         src="assets/images/avatar-girl.png" alt="User Avatar of Megan Simpsons">
+                                </div>
+
+                                <div class="image-changer pad-20 text-center" id="personal-profile-image-changer">
+
+                                    <p>To change your avatar, select a new file below or <span class="overlay-link">drag-and-drop</span>
+                                        one here. 512x512 is awesome, but we'll resize it.</p>
+
+                                    <p>Or,</p>
+
+                                    <div class="file-upload-button">
+                                        <button class="btn btn-primary" id="personal-profile-image-upload-btn">Upload
+                                            Photo
+                                        </button>
+                                        <input type="file" name="image-upload" class="hide"
+                                               id="personal-profile-image-upload-input">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--/ .col-* -->
+
+                        <div class="col-md-8 col-md-pull-4">
+                            <form id="form-settings-profile" role="form" action="index.html" novalidate="novalidate">
+
+                                <div class="row">
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-group-default">
+                                            <label>First Name</label>
+                                            <input type="text" name="fname" placeholder="Megan" value="Megan"
+                                                   class="form-control" required="" aria-required="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Last Names</label>
+                                            <input type="text" name="lname" placeholder="Simpsons" value="Simpsons"
+                                                   class="form-control" required="" aria-required="true">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--/ .row -->
+
+                                <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-group-default">
+                                            <label>Username</label>
+                                            <input type="text" name="username" placeholder="megan_simpson"
+                                                   value="megan_simpson" class="form-control" required=""
+                                                   aria-required="true">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--/ .row -->
+
+                                <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-group-default">
+                                            <label>Email</label>
+                                            <input type="email" name="email" placeholder="megan_simpson@gmail.com"
+                                                   value="megan_simpson@gmail.com" class="form-control" required=""
+                                                   aria-required="true">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--/ .row -->
+
+                                <button class="btn btn-complete" type="submit">Update</button>
+                            </form>
+                        </div>
+                        <!--/ .col-* -->
+
+
+                    </div>
+                    <!--/ .row -->
+
+                </div>
+                <!--/ .tab-pane #settings-profile -->
+
+                <div role="tabpanel" class="tab-pane mg-20-y" id="settings-password">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="form-settings-profile" role="form" action="index.html" novalidate="novalidate">
+
+                                <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-group-default">
+                                            <label>Old Password</label>
+                                            <input type="password" name="username" placeholder="" class="form-control"
+                                                   required="" aria-required="true">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--/ .row -->
+
+                                <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-group-default">
+                                            <label>New Password</label>
+                                            <input type="password" name="email" placeholder="Minimum of 6 characters"
+                                                   class="form-control" required="" aria-required="true">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--/ .row -->
+
+                                <button class="btn btn-complete" type="submit">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!--/ .row -->
+                </div>
+                <!--/ .tab-pane #settings-password -->
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <!--/ .panel-body -->
+</div>

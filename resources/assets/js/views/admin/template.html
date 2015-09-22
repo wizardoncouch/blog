@@ -30,8 +30,7 @@
                                 v-attr="title: logged.name"/>
                         </a>
                         <ul class="dropdown-menu fill-dark-menu">
-                            <li><a href="page-profile.php">Profile</a></li>
-                            <li><a href="admin-profile-settings.php">Settings</a></li>
+                            <li><a v-link="{ name: 'adminSettings' }">Settings</a></li>
                             <li><a href="javascript:void(0);" v-on="click: doLogout">Log Out</a></li>
                         </ul>
                     </li>
@@ -43,14 +42,7 @@
     <div id="admin-content" class="content-area pad-20-y">
         <main id="main" class="site-main" role="main">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="post-editor">
-                            <router-view></router-view>
-                        </div>
-                        <!--/ .post-editor -->
-                    </div>
-                </div>
+                <router-view></router-view>
             </div>
         </main>
     </div>

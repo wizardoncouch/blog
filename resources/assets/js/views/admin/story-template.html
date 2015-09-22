@@ -1,78 +1,84 @@
 <div class="row">
-    <div class="col-sm-8 col-md-9">
-        <h2>
-            <span>{{ $route.params.id > 0 ? 'Edit Story' : 'Add New Story' }}</span>
-            <a v-link="{ name : 'storyList' }" class="cancel-btn">Cancel</a>
-        </h2>
+    <div class="col-sm-12">
+        <div class="post-editor">
+            <div class="row">
+                <div class="col-sm-8 col-md-9">
+                    <h2>
+                        <span>{{ $route.params.id > 0 ? 'Edit Story' : 'Add New Story' }}</span>
+                        <a v-link="{ name : 'storyList' }" class="cancel-btn">Cancel</a>
+                    </h2>
 
-        <div class="alert alert-danger" role="alert" v-if="hasError">
-            <div v-repeat="row: errors.values"><i class="fa fa-times"></i> &nbsp; {{ row }}</div>
-        </div>
+                    <div class="alert alert-danger" role="alert" v-if="hasError">
+                        <div v-repeat="row: errors.values"><i class="fa fa-times"></i> &nbsp; {{ row }}</div>
+                    </div>
 
-        <div class="form-group mg-20-b">
-            <input type="text" name="title" id="post-title" class="form-control input-lg" placeholder="Enter Title Here"
-                   v-model="story.title"/>
-        </div>
+                    <div class="form-group mg-20-b">
+                        <input type="text" name="title" id="post-title" class="form-control input-lg"
+                               placeholder="Enter Title Here"
+                               v-model="story.title"/>
+                    </div>
 
-        <div class="form-group">
-            <button class="btn btn-sm" data-toggle="modal" data-target="#modal-media" v-on="click:getFiles"><i
-                    class="fa fa-photo"></i> Add
-                Media
-            </button>
-            <textarea id="post-content" class="form-control" rows="10" cols="10" v-model="story.content"></textarea>
-        </div>
-        <div class="panel-group accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab">
-                    <h4 class="panel-title">
-                        <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
-                           data-parent="#accordion"
-                           href="#additionalInformationCollapse" aria-expanded="true"
-                           aria-controls="additionalInformationCollapse">Additional Information</a>
-                    </h4>
-                </div>
-                <div id="additionalInformationCollapse" class="panel-collapse collapse in" role="tabpanel"
-                     aria-labelledby="headingOne">
-                    <div class="panel-body">
-                        <div class="checkbox mg-20-b">
-                            <input type="checkbox" id="publish-story" v-model="story.published"/>
-                            <label for="publish-story">Published</label>
-                        </div>
-                        <div class="checkbox mg-20-b">
-                            <input type="checkbox" id="story-featured" v-model="story.featured"/>
-                            <label for="story-featured">Featured</label>
-                        </div>
-                        <div class="mg-20-b">
+                    <div class="form-group">
+                        <button class="btn btn-sm" data-toggle="modal" data-target="#modal-media" v-on="click:getFiles">
+                            <i
+                                    class="fa fa-photo"></i> Add
+                            Media
+                        </button>
+                        <textarea id="post-content" class="form-control" rows="10" cols="10"
+                                  v-model="story.content"></textarea>
+                    </div>
+                    <div class="panel-group accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab">
+                                <h4 class="panel-title">
+                                    <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
+                                       data-parent="#accordion"
+                                       href="#additionalInformationCollapse" aria-expanded="true"
+                                       aria-controls="additionalInformationCollapse">Additional Information</a>
+                                </h4>
+                            </div>
+                            <div id="additionalInformationCollapse" class="panel-collapse collapse in" role="tabpanel"
+                                 aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="checkbox mg-20-b">
+                                        <input type="checkbox" id="publish-story" v-model="story.published"/>
+                                        <label for="publish-story">Published</label>
+                                    </div>
+                                    <div class="checkbox mg-20-b">
+                                        <input type="checkbox" id="story-featured" v-model="story.featured"/>
+                                        <label for="story-featured">Featured</label>
+                                    </div>
+                                    <div class="mg-20-b">
                             <textarea class="form-control" rows="3" cols="10" v-model="story.excerpt"
                                       placeholder="Add optional story excerpt or summary."></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-sm-4 col-md-3">
+                <div class="col-sm-4 col-md-3">
 
 
-        <aside id="admin-postbox">
+                    <aside id="admin-postbox">
 
-            <div class="panel-group accordion">
+                        <div class="panel-group accordion">
 
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
-                        <h4 class="panel-title">
-                            <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
-                               data-parent="#accordion" href="#collapsePublish" aria-expanded="true"
-                               aria-controls="collapsePublish">Details</a>
-                        </h4>
-                    </div>
-                    <div id="collapsePublish" class="panel-collapse collapse in" role="tabpanel"
-                         aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <ul class="list-menu">
-                                <li>
-                                    <i class="fa fa-fw fa-info-circle"></i> Status:
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title">
+                                        <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
+                                           data-parent="#accordion" href="#collapsePublish" aria-expanded="true"
+                                           aria-controls="collapsePublish">Details</a>
+                                    </h4>
+                                </div>
+                                <div id="collapsePublish" class="panel-collapse collapse in" role="tabpanel"
+                                     aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <ul class="list-menu">
+                                            <li>
+                                                <i class="fa fa-fw fa-info-circle"></i> Status:
                                     <span class="label" v-if="story.status.length > 0"
                                           v-class=" label-warning: story.status == 'draft' || story.status == 'new',
                                                     label-primary: story.status == 'published',
@@ -81,104 +87,111 @@
                                     </span> &nbsp;
                                     <span v-if="story.featured == 1"
                                           class="label label-success"><strong>Featured</strong></span>
-                                </li>
-                                <li>
-                                    <i class="fa fa-fw fa-user"></i> Author: <strong>{{ story.author }}</strong>
-                                </li>
-                                <li>
-                                    <i class="fa fa-fw fa-calendar"></i> Created at: <strong>{{ story.created
-                                    }}</strong>
-                                </li>
-                            </ul>
-                        </div>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-fw fa-user"></i> Author: <strong>{{ story.author
+                                                }}</strong>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-fw fa-calendar"></i> Created at: <strong>{{
+                                                story.created
+                                                }}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                    </div>
-                </div>
-                <!--/ .panel -->
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingCategory">
-                        <h4 class="panel-title">
-                            <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
-                               data-parent="#accordion" href="#collapseCategory" aria-expanded="true"
-                               aria-controls="collapseCategory">Category</a>
-                        </h4>
-                    </div>
-                    <div id="collapseCategory" class="panel-collapse collapse in" role="tabpanel"
-                         aria-labelledby="headingCategory">
-                        <div class="panel-body">
-                            <select data-placeholder="Select Category" v-model="story.category_id" options="categories"
-                                    v-chosen="category: categories"></select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingKeywords">
-                        <h4 class="panel-title">
-                            <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
-                               data-parent="#accordion" href="#collapseKeywords" aria-expanded="true"
-                               aria-controls="collapseCategories">Keywords</a>
-                        </h4>
-                    </div>
-                    <div id="collapseKeywords" class="panel-collapse collapse in" role="tabpanel"
-                         aria-labelledby="headingKeywords">
-                        <div class="panel-body">
-                            <select data-placeholder="Select Keywords" multiple v-model="story.keywords"
-                                    options="keywords"
-                                    v-chosen="keyword: keywords"></select>
-                        </div>
-                    </div>
-                </div>
-                <!--/ .panel -->
-
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingThree">
-                        <h4 class="panel-title">
-                            <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
-                               data-parent="#accordion" href="#collapseFeaturedImage" aria-expanded="true"
-                               aria-controls="collapseFeaturedImage">Default Image</a>
-                        </h4>
-                    </div>
-                    <div id="collapseFeaturedImage" class="panel-collapse collapse in" role="tabpanel"
-                         aria-labelledby="headingThree">
-                        <div class="panel-body">
-                            <div class="open-modal-media" v-if="story.default_image.length == 0">
-                                <button class="btn btn-sm btn-link center-block upload-media-btn" data-toggle="modal"
-                                        data-target="#modal-media">Set Featured Image
-                                </button>
+                                </div>
+                            </div>
+                            <!--/ .panel -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingCategory">
+                                    <h4 class="panel-title">
+                                        <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
+                                           data-parent="#accordion" href="#collapseCategory" aria-expanded="true"
+                                           aria-controls="collapseCategory">Category</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseCategory" class="panel-collapse collapse in" role="tabpanel"
+                                     aria-labelledby="headingCategory">
+                                    <div class="panel-body">
+                                        <select data-placeholder="Select Category" v-model="story.category_id"
+                                                options="categories"
+                                                v-chosen-story="category: categories"></select>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="upload-media-attachment" v-if="story.default_image.length > 0">
-                                <div class="attachment-preview">
-                                    <div class="thumbnail">
-                                        <div class="centered">
-                                            <img v-attr="src: story.default_image" draggable="false" alt="">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingKeywords">
+                                    <h4 class="panel-title">
+                                        <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
+                                           data-parent="#accordion" href="#collapseKeywords" aria-expanded="true"
+                                           aria-controls="collapseCategories">Keywords</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseKeywords" class="panel-collapse collapse in" role="tabpanel"
+                                     aria-labelledby="headingKeywords">
+                                    <div class="panel-body">
+                                        <select data-placeholder="Select Keywords" multiple v-model="story.keywords"
+                                                options="keywords"
+                                                v-chosen-story="keyword: keywords"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/ .panel -->
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingThree">
+                                    <h4 class="panel-title">
+                                        <a class="text-capitalize pad-10-y" role="button" data-toggle="collapse"
+                                           data-parent="#accordion" href="#collapseFeaturedImage" aria-expanded="true"
+                                           aria-controls="collapseFeaturedImage">Default Image</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFeaturedImage" class="panel-collapse collapse in" role="tabpanel"
+                                     aria-labelledby="headingThree">
+                                    <div class="panel-body">
+                                        <div class="open-modal-media" v-if="story.default_image.length == 0">
+                                            <button class="btn btn-sm btn-link center-block upload-media-btn"
+                                                    data-toggle="modal"
+                                                    data-target="#modal-media">Set Featured Image
+                                            </button>
+                                        </div>
+
+                                        <div class="upload-media-attachment" v-if="story.default_image.length > 0">
+                                            <div class="attachment-preview">
+                                                <div class="thumbnail">
+                                                    <div class="centered">
+                                                        <img v-attr="src: story.default_image" draggable="false" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--/ .panel -->
+
+                            <div class="panel panel-default">
+                                <button class="btn btn-sm btn-primary pull-left" v-on="click: saveStory">Save</button>
+                                <!--<button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"-->
+                                <!--alt="Move to Trash">-->
+                                <!--Move to Trash-->
+                                <!--</button>-->
+                                <button class="btn btn-sm btn-link pull-right overlay-danger">
+                                    <i class="fa fa-trash fa-2x"></i>
+                                </button>
+
+                            </div>
+                            <!--/ .panel -->
+
                         </div>
-                    </div>
-                </div>
-                <!--/ .panel -->
 
-                <div class="panel panel-default">
-                    <button class="btn btn-sm btn-primary pull-left" v-on="click: saveStory">Save</button>
-                    <!--<button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"-->
-                    <!--alt="Move to Trash">-->
-                    <!--Move to Trash-->
-                    <!--</button>-->
-                    <button class="btn btn-sm btn-link pull-right overlay-danger">
-                        <i class="fa fa-trash fa-2x"></i>
-                    </button>
+                    </aside>
 
                 </div>
-                <!--/ .panel -->
-
             </div>
-
-        </aside>
-
+        </div>
     </div>
 </div>
 
@@ -219,15 +232,22 @@
 
                             <div class="form-group form-group-default">
                                 <label>Title</label>
-                                <input type="text" class="form-control" placeholder="Title goes here" v-model="files[selected.active].title"/>
+                                <input type="text" class="form-control" placeholder="Title goes here"
+                                       v-model="files[selected.active].title"/>
                             </div>
                             <div class="form-group form-group-default">
-                                <label>Width <small>px</small></label>
-                                <input type="text" class="form-control" placeholder="width in pixels" v-model="files[selected.active].data.width"/>
+                                <label>Width
+                                    <small>px</small>
+                                </label>
+                                <input type="text" class="form-control" placeholder="width in pixels"
+                                       v-model="files[selected.active].data.width"/>
                             </div>
                             <div class="form-group form-group-default">
-                                <label>Height <small>px</small></label>
-                                <input type="text" class="form-control" placeholder="height in pixels" v-model="files[selected.active].data.height"/>
+                                <label>Height
+                                    <small>px</small>
+                                </label>
+                                <input type="text" class="form-control" placeholder="height in pixels"
+                                       v-model="files[selected.active].data.height"/>
                             </div>
                             <div class="checkbox mg-20-b">
                                 <input type="checkbox" id="image-proportion"/>
@@ -245,10 +265,11 @@
                 </div>
                 <div class="pull-sm-right">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-complete">Done</button>
+                    <button type="button" class="btn btn-complete" v-on="click:insertFiles">Insert</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!--/ .modal -->
+

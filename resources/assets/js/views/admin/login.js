@@ -30,7 +30,7 @@ module.exports = {
                     if (response.code == 200) {
                         var token = 'Bearer ' + response.token;
                         if (self.login.remember == true) {
-                            localStorage.setItem('AdminAuth', token);
+                            Cookies.set('AdminAuth', token, {expires: Infinity});
                         } else {
                             Cookies.set('AdminAuth', token);
                         }
