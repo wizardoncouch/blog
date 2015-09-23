@@ -36,6 +36,7 @@ module.exports = {
     data: function () {
         return {
             tinymce_container: 'post-content',
+            set_featured_image: false,
             categories: [],
             keywords: [],
             files: [],
@@ -109,6 +110,8 @@ module.exports = {
                 /* Maybe display some more file information on your page */
             }
         });
+        //get files
+        self.getFiles();
 
     },
     methods: {
@@ -172,38 +175,49 @@ module.exports = {
         },
         fileSelect: function (index) {
             //add selected
-            if (this.selected.files.indexOf(index) == -1) {
-                this.selected.files.push(index);
+            if (this.set_featured_image) {
+                this.story.default_image = this.files[index].filename;
+                this.set_featured_image = false;
+                $('#modal-media').modal('toggle');
+            } else {
+                if (this.selected.files.indexOf(index) == -1) {
+                    this.selected.files.push(index);
+                }
+                //add active
+                this.selected.active = index;
             }
-            //add active
-            this.selected.active = index;
         },
         fileDeselect: function (index) {
             //remove active
-            if (this.selected.active == index) {
-                this.selected.active = null;
-            }
-            //remove selected
-            var index = this.selected.files.indexOf(index);
-            if (index > -1) {
-                this.selected.files.splice(index, 1);
+            if (!this.set_featured_image) {
+                if (this.selected.active == index) {
+                    this.selected.active = null;
+                }
+                //remove selected
+                var index = this.selected.files.indexOf(index);
+                if (index > -1) {
+                    this.selected.files.splice(index, 1);
+                }
             }
         },
         insertFiles: function () {
-            var text = '';
-            for (var i in this.selected.files) {
-                var index = this.selected.files[i];
-                var file = this.files[index];
-                text += '<span style="position:relative">';
-                text += '<img src="' + file.filename + '" width="' + file.width + '" height="' + file.height + '" />';
-                text += '</span>';
+            if (!this.set_featured_image) {
+                var text = '';
+                for (var i in this.selected.files) {
+                    var index = this.selected.files[i];
+                    var file = this.files[index];
+                    text += '<p style="display:inline-block; position:relative; overflow: hidden;">';
+                    text += '<img src="' + file.filename + '" width="' + file.width + '" height="' + file.height + '" />';
+                    text += '<span style="position:absolute; bottom: 5px; padding:10px 5px; display:block; width:100%; color:#ffffff; background: rgba(0,0,0,0.5); z-index:999;">'+file.title+'</span>';
+                    text += '</p>';
+                }
+                var editor = tinyMCE.get(this.tinymce_container);
+                editor.execCommand('mceInsertContent', false, text);
+                this.selected.files = [];
+                this.selected.active = null;
+                $('#modal-media').modal('toggle');
+                //tinyMCE.activeEditor.execCommand('mceInsertContent', false, "some text");
             }
-            var editor = tinyMCE.get(this.tinymce_container);
-            editor.execCommand('mceInsertContent', false, text);
-            this.selected.files = [];
-            this.selected.active = null;
-            $('#modal-media').modal('toggle');
-            //tinyMCE.activeEditor.execCommand('mceInsertContent', false, "some text");
         },
         saveStory: function () {
             this.validate();
@@ -255,6 +269,12 @@ module.exports = {
                 this.errors.fields.push('category');
                 this.errors.values.push('Category is required.');
             }
+        },
+        setFeaturedImage: function () {
+            this.set_featured_image = true;
+        },
+        deleteStory: function () {
+
         }
     }
 };

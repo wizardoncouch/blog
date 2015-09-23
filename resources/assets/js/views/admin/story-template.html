@@ -154,18 +154,22 @@
                                         <div class="open-modal-media" v-if="story.default_image.length == 0">
                                             <button class="btn btn-sm btn-link center-block upload-media-btn"
                                                     data-toggle="modal"
-                                                    data-target="#modal-media">Set Featured Image
+                                                    data-target="#modal-media"
+                                                    v-on="click:setFeaturedImage">Set Featured Image
                                             </button>
                                         </div>
 
                                         <div class="upload-media-attachment" v-if="story.default_image.length > 0">
-                                            <div class="attachment-preview">
+                                            <a href="javascript:void(0);" class="attachment-preview"
+                                               data-toggle="modal"
+                                               data-target="#modal-media"
+                                               v-on="click:setFeaturedImage">
                                                 <div class="thumbnail">
                                                     <div class="centered">
                                                         <img v-attr="src: story.default_image" draggable="false" alt="">
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -174,11 +178,8 @@
 
                             <div class="panel panel-default">
                                 <button class="btn btn-sm btn-primary pull-left" v-on="click: saveStory">Save</button>
-                                <!--<button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.published == 1"-->
-                                <!--alt="Move to Trash">-->
-                                <!--Move to Trash-->
-                                <!--</button>-->
-                                <button class="btn btn-sm btn-link pull-right overlay-danger">
+                                <button class="btn btn-sm btn-link pull-right overlay-danger" v-if="story.id > 0"
+                                        v-on="click: deleteStory">
                                     <i class="fa fa-trash fa-2x"></i>
                                 </button>
 
@@ -265,7 +266,9 @@
                 </div>
                 <div class="pull-sm-right">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-complete" v-on="click:insertFiles">Insert</button>
+                    <button type="button" class="btn btn-complete" v-on="click:insertFiles" v-if="!set_featured_image">
+                        Insert
+                    </button>
                 </div>
             </div>
         </div>
